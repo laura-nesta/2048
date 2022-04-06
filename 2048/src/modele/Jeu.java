@@ -111,7 +111,26 @@ public class Jeu extends Observable {
     }
 
     public void ajoutCoup(){
+        new Thread(){
+            public void run(){
+                int ind; //position aléatoire
+                Random rand = new Random();
+                do{
+                    ind = rand.nextInt(tabCases.length* tabCases.length);
+                }while(tabCases[getX(ind)][getY(ind)] != null);
 
+                int rn; //aléatoire 2 ou 4
+                Random rnd = new Random();
+                rn = rnd.nextInt(2);
+                if(rn == 0)
+                    tabCases[getX(ind)][getY(ind)] = new Case(4);
+                else
+                    tabCases[getX(ind)][getY(ind)] = new Case(2);
+            }
+        }.start();
+
+        setChanged();
+        notifyObservers();
     }
 
     public void moove(Direction dir){
