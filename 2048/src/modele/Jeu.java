@@ -10,7 +10,8 @@ public class Jeu extends Observable {
 
     public Jeu(int size) {
         tabCases = new Case[size][size];
-        rnd();
+        init();
+        //rnd();
     }
 
     public int getSize() {
@@ -48,11 +49,57 @@ public class Jeu extends Observable {
 
         }.start();
 
+        setChanged();
+        notifyObservers();
+    }
+
+    public int getX(int ind){
+        return (int)ind/ tabCases.length;
+    }
+
+    public int getY(int ind){
+        return (int)ind%tabCases.length;
+    }
+
+    public void init(){
+        new Thread(){
+            public void run(){
+                //on vide la grille
+                for(int i=0; i<tabCases.length; i++){
+                    for(int j=0; j<tabCases.length; j++){
+                        tabCases[i][j] = null;
+                    }
+                }
+
+                //on remplie 2 cases aléatoires de la grille
+                int rp1; //position aléatoire1
+                int rp2; //position aléatoire2
+                Random rand = new Random();
+                do{
+                    rp1 = rand.nextInt(tabCases.length* tabCases.length);
+                    rp2 = rand.nextInt(tabCases.length* tabCases.length);
+                }while(rp1 == rp2);
+
+                int rn; //aléatoire 2 ou 4 (la probabilité d'apparition de 2 est plus élevé)
+                for(int i = 0; i<2; i++){
+                    Random rnd = new Random();
+                    rn = rnd.nextInt(5);
+                    int ind;
+                    if(i==0)
+                        ind = rp1;
+                    else
+                        ind = rp2;
+                    if(rn == 0)
+                        tabCases[getX(ind)][getY(ind)] = new Case(4);
+                    else
+                        tabCases[getX(ind)][getY(ind)] = new Case(2);
+                }
+            }
+
+        }.start();
 
         setChanged();
         notifyObservers();
-
-
     }
 
 }
