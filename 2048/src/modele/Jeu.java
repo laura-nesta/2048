@@ -226,7 +226,7 @@ public class Jeu extends Observable {
             tabCases[getX(ind)][getY(ind)] = new Case(2);
     }
 
-    public void moove(Direction dir){
+    public void move(Direction dir){
         new Thread(){
             public void run(){
                 deplacement(dir);
