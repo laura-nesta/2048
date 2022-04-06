@@ -106,38 +106,138 @@ public class Jeu extends Observable {
 
     }
 
-    public void fusion(Direction dir){
+    public int[] getRow(int ind){
+        int[] tab = new int[tabCases.length];
+        for(int i = 0; i < tabCases.length; i++){
+            if(tabCases[i][ind] == null)
+                tab[i] = 0;
+            else
+                tab[i] = tabCases[i][ind].getValeur();
+        }
+        return tab;
+    }
 
+    public int[] getLine(int ind){
+        int[] tab = new int[tabCases.length];
+        for(int i = 0; i < tabCases.length; i++){
+            if(tabCases[ind][i] == null)
+                tab[i] = 0;
+            else
+                tab[i] = tabCases[ind][i].getValeur();
+        }
+        return tab;
+    }
+
+    public void setRow(int[] tab, int ind){
+        for(int i = 0; i < tabCases.length; i++){
+            if(tab[i] == 0)
+                tabCases[i][ind] = null;
+            else
+                tabCases[i][ind] = new Case(tab[i]);
+        }
+    }
+
+    public void setLine(int[] tab, int ind){
+        for(int i = 0; i < tabCases.length; i++){
+            if(tab[i] == 0)
+                tabCases[ind][i] = null;
+            else
+                tabCases[ind][i] = new Case(tab[i]);
+        }
+    }
+
+    public void fusion(Direction dir){
+        int[] tab ;
+        //fusion à gauche
+        if (dir == Direction.gauche){
+            for(int i = 0; i < tabCases.length; i++){
+                tab = getLine(i);
+                int ind = 0;
+                while(ind< tabCases.length-1){
+                    if(tab[ind]==tab[ind+1]){
+                        tab[ind] = tab[ind]*tab[ind+1];
+                        tab[ind+1] = 0;
+                    }
+                    ind++;
+                }
+                setLine(tab, i);
+            }
+        }
+        //fusion à droite
+        if (dir == Direction.droite){
+            for(int i = 0; i < tabCases.length; i++){
+                tab = getLine(i);
+                int ind = tabCases.length-1;
+                while(ind > 0){
+                    if(tab[ind]==tab[ind-1]){
+                        tab[ind] = tab[ind]*tab[ind-1];
+                        tab[ind-1] = 0;
+                    }
+                    ind--;
+                }
+                setLine(tab, i);
+            }
+        }
+        //fusion en haut
+        if (dir == Direction.haut){
+            for(int i = 0; i < tabCases.length; i++){
+                tab = getRow(i);
+                int ind = 0;
+                while(ind< tabCases.length-1){
+                    if(tab[ind]==tab[ind+1]){
+                        tab[ind] = tab[ind]*tab[ind+1];
+                        tab[ind+1] = 0;
+                    }
+                    ind++;
+                }
+                setRow(tab, i);
+            }
+        }
+        //fusion en bas
+        if (dir == Direction.haut){
+            for(int i = 0; i < tabCases.length; i++){
+                tab = getRow(i);
+                int ind = tabCases.length-1;
+                while(ind > 0){
+                    if(tab[ind]==tab[ind-1]){
+                        tab[ind] = tab[ind]*tab[ind-1];
+                        tab[ind-1] = 0;
+                    }
+                    ind--;
+                }
+                setRow(tab, i);
+            }
+        }
     }
 
     public void ajoutCoup(){
+        int ind; //position aléatoire
+        Random rand = new Random();
+        do{
+            ind = rand.nextInt(tabCases.length* tabCases.length);
+        }while(tabCases[getX(ind)][getY(ind)] != null);
+
+        int rn; //aléatoire 2 ou 4
+        Random rnd = new Random();
+        rn = rnd.nextInt(2);
+        if(rn == 0)
+            tabCases[getX(ind)][getY(ind)] = new Case(4);
+        else
+            tabCases[getX(ind)][getY(ind)] = new Case(2);
+    }
+
+    public void moove(Direction dir){
         new Thread(){
             public void run(){
-                int ind; //position aléatoire
-                Random rand = new Random();
-                do{
-                    ind = rand.nextInt(tabCases.length* tabCases.length);
-                }while(tabCases[getX(ind)][getY(ind)] != null);
-
-                int rn; //aléatoire 2 ou 4
-                Random rnd = new Random();
-                rn = rnd.nextInt(2);
-                if(rn == 0)
-                    tabCases[getX(ind)][getY(ind)] = new Case(4);
-                else
-                    tabCases[getX(ind)][getY(ind)] = new Case(2);
+                deplacement(dir);
+                fusion(dir);
+                deplacement(dir);
+                ajoutCoup();
             }
         }.start();
 
         setChanged();
         notifyObservers();
-    }
-
-    public void moove(Direction dir){
-        deplacement(dir);
-        fusion(dir);
-        deplacement(dir);
-        ajoutCoup();
     }
 
 }
