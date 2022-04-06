@@ -155,7 +155,7 @@ public class Jeu extends Observable {
                 int ind = 0;
                 while(ind< tabCases.length-1){
                     if(tab[ind]==tab[ind+1]){
-                        tab[ind] = tab[ind]*tab[ind+1];
+                        tab[ind] = tab[ind]*2;
                         tab[ind+1] = 0;
                     }
                     ind++;
@@ -170,7 +170,7 @@ public class Jeu extends Observable {
                 int ind = tabCases.length-1;
                 while(ind > 0){
                     if(tab[ind]==tab[ind-1]){
-                        tab[ind] = tab[ind]*tab[ind-1];
+                        tab[ind] = tab[ind]*2;
                         tab[ind-1] = 0;
                     }
                     ind--;
@@ -185,7 +185,7 @@ public class Jeu extends Observable {
                 int ind = 0;
                 while(ind< tabCases.length-1){
                     if(tab[ind]==tab[ind+1]){
-                        tab[ind] = tab[ind]*tab[ind+1];
+                        tab[ind] = tab[ind]*2;
                         tab[ind+1] = 0;
                     }
                     ind++;
@@ -194,13 +194,13 @@ public class Jeu extends Observable {
             }
         }
         //fusion en bas
-        if (dir == Direction.haut){
+        if (dir == Direction.bas){
             for(int i = 0; i < tabCases.length; i++){
                 tab = getRow(i);
                 int ind = tabCases.length-1;
                 while(ind > 0){
                     if(tab[ind]==tab[ind-1]){
-                        tab[ind] = tab[ind]*tab[ind-1];
+                        tab[ind] = tab[ind]*2;
                         tab[ind-1] = 0;
                     }
                     ind--;
