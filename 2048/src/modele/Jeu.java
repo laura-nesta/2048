@@ -102,4 +102,23 @@ public class Jeu extends Observable {
         notifyObservers();
     }
 
+    public void deplacement(Direction dir){
+
+    }
+
+    public void fusion(Direction dir){
+
+    }
+
+    public void ajoutCoup(){
+
+    }
+
+    public void moove(Direction dir){
+        deplacement(dir);
+        fusion(dir);
+        deplacement(dir);
+        ajoutCoup();
+    }
+
 }

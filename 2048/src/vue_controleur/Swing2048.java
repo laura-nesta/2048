@@ -1,6 +1,7 @@
 package vue_controleur;
 
 import modele.Case;
+import modele.Direction;
 import modele.Jeu;
 
 import javax.swing.*;
@@ -88,10 +89,10 @@ public class Swing2048 extends JFrame implements Observer {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch(e.getKeyCode()) {  // on regarde quelle touche a été pressée
-                    case KeyEvent.VK_LEFT : jeu.rnd(); break;
-                    case KeyEvent.VK_RIGHT : jeu.rnd(); break;
-                    case KeyEvent.VK_DOWN : jeu.rnd(); break;
-                    case KeyEvent.VK_UP : jeu.rnd(); break;
+                    case KeyEvent.VK_LEFT : jeu.moove(Direction.gauche); break;
+                    case KeyEvent.VK_RIGHT : jeu.moove(Direction.droite); break;
+                    case KeyEvent.VK_DOWN : jeu.moove(Direction.bas); break;
+                    case KeyEvent.VK_UP : jeu.moove(Direction.haut); break;
                 }
             }
         });
