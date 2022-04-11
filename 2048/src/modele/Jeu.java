@@ -2,6 +2,8 @@ package modele;
 
 import java.util.Observable;
 import java.util.Random;
+//import java.util.ArrayList;
+//import java.util.List;
 
 public class Jeu extends Observable {
 
@@ -103,7 +105,27 @@ public class Jeu extends Observable {
     }
 
     public void deplacement(Direction dir){
-
+       /* for (int i = 0; i < tabCases.length; i++) {
+            List<Case> setCase = new ArrayList<Case>();
+            for (int j = 0; j < tabCases.length; j++) {
+                switch (dir) {
+                    case gauche:
+                        setCase.add(tabCases[i][j]);
+                        break;
+                    case droite:
+                        setCase.add(tabCases[i][tabCases.length - j - 1]);
+                        break;
+                    case haut:
+                        setCase.add(tabCases[j][i]);
+                        break;
+                    case bas:
+                        setCase.add(tabCases[tabCases.length - j - 1][i]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }*/
     }
 
     public int[] getRow(int ind){
