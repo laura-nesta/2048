@@ -2,8 +2,6 @@ package modele;
 
 import java.util.Observable;
 import java.util.Random;
-//import java.util.ArrayList;
-//import java.util.List;
 
 public class Jeu extends Observable {
 
@@ -104,30 +102,6 @@ public class Jeu extends Observable {
         notifyObservers();
     }
 
-    public void deplacement(Direction dir){
-       /* for (int i = 0; i < tabCases.length; i++) {
-            List<Case> setCase = new ArrayList<Case>();
-            for (int j = 0; j < tabCases.length; j++) {
-                switch (dir) {
-                    case gauche:
-                        setCase.add(tabCases[i][j]);
-                        break;
-                    case droite:
-                        setCase.add(tabCases[i][tabCases.length - j - 1]);
-                        break;
-                    case haut:
-                        setCase.add(tabCases[j][i]);
-                        break;
-                    case bas:
-                        setCase.add(tabCases[tabCases.length - j - 1][i]);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }*/
-    }
-
     public int[] getRow(int ind){
         int[] tab = new int[tabCases.length];
         for(int i = 0; i < tabCases.length; i++){
@@ -167,6 +141,104 @@ public class Jeu extends Observable {
                 tabCases[ind][i] = new Case(tab[i]);
         }
     }
+        public void deplacement(Direction dir) {
+            switch (dir) {
+                case gauche:
+                for (int ind = 0; ind < tabCases.length; ind++) {
+                    int[] tab = getLine(ind); //ligne ind recup
+                    boolean decalageRealise = true;
+                    while (decalageRealise) {
+                        decalageRealise = false;
+
+                        for (int j = getSize() - 1; j >= 0; j--) { //regarde chaque case
+                            if (tab[j] == 0) {
+                                if (j < getSize() -1 && (tab[j + 1] != 0)) {
+                                    decalageRealise = true;
+                                    int rest = getSize() - j -1;
+                                    for (int k = 0; k < rest; k++) {
+                                        tab[j + k] = tab[j + k + 1];
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    setLine(tab, ind);
+                }
+                    break;
+                case droite:
+                    for (int ind = 0; ind < tabCases.length; ind++) {
+                        int[] tab = getLine(ind); //ligne ind recup
+                        boolean decalageRealise = true;
+                        while (decalageRealise) {
+                            decalageRealise = false;
+
+                            for (int j = 0; j <= getSize() - 1; j++) { //regarde chaque case
+                                if (tab[j] == 0) {
+                                    if (j > 0 && (tab[j - 1] != 0)) {
+                                        decalageRealise = true;
+                                        int rest = j;
+                                        for (int k = 0; k < rest ; k++) {
+                                            tab[j - k] = tab[j - k - 1];
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        setLine(tab, ind);
+                    }
+                    break;
+                case haut:
+                    for (int ind = 0; ind < tabCases.length; ind++) {
+                        int[] tab = getRow(ind); //ligne ind recup
+                        boolean decalageRealise = true;
+                        while (decalageRealise) {
+                            decalageRealise = false;
+
+                            for (int j = getSize() - 1; j >= 0; j--) { //regarde chaque case
+                                if (tab[j] == 0) {
+                                    if (j < getSize() -1 && (tab[j + 1] != 0)) {
+                                        decalageRealise = true;
+                                        int rest = getSize() - j -1;
+                                        for (int k = 0; k < rest; k++) {
+                                            tab[j + k] = tab[j + k + 1];
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        setRow(tab, ind);
+                    }
+                    break;
+                case bas:
+                    for (int ind = 0; ind < tabCases.length; ind++) {
+                        int[] tab = getRow(ind); //ligne ind recup
+                        boolean decalageRealise = true;
+                        while (decalageRealise) {
+                            decalageRealise = false;
+
+                            for (int j = 0; j <= getSize() - 1; j++) { //regarde chaque case
+                                if (tab[j] == 0) {
+                                    if (j > 0 && (tab[j - 1] != 0)) {
+                                        decalageRealise = true;
+                                        int rest = j;
+                                        for (int k = 0; k < rest ; k++) {
+                                            tab[j - k] = tab[j - k - 1];
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        setRow(tab, ind);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
     public void fusion(Direction dir){
         int[] tab ;
@@ -253,7 +325,7 @@ public class Jeu extends Observable {
             public void run(){
                 deplacement(dir);
                 fusion(dir);
-                deplacement(dir);
+                //deplacement(dir);
                 ajoutCoup();
             }
         }.start();
