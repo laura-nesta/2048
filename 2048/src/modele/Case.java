@@ -2,14 +2,12 @@ package modele;
 
 import java.awt.*;
 
-public class Case /*extends Jeu*/{
+public class Case{
     private int valeur;
-    //private Point coordonnee;
     private Jeu jeu;
 
-    public Case(int _valeur, Jeu _jeu/* Point _coordonnee*/) {
+    public Case(int _valeur, Jeu _jeu) {
         valeur = _valeur;
-        //coordonnee = _coordonnee;
         jeu = _jeu;
     }
 
@@ -20,18 +18,15 @@ public class Case /*extends Jeu*/{
     public void setValeur(int val){
         valeur = val;
     }
-/*
-    public Point getCoordonnee(){return coordonnee;}
+
+    public Point getCoordonee(){
+        return this.jeu.hm.get(this);
+    }
 
     public void setCoordonnee(Point p){
-        coordonnee = p;
+        this.jeu.hm.put(this, p);
     }
-*/
-    /*
-    public void setCoordonne(int x, int y){
-        setCoordonnee(new Point(x,y));
-    }
-*/
+
     @Override
     public String toString(){
         return ""+valeur;
@@ -108,5 +103,5 @@ public class Case /*extends Jeu*/{
 
     }
     */
- 
+
 }

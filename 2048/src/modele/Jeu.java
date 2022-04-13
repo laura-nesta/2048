@@ -1,12 +1,15 @@
 package modele;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Random;
 
 public class Jeu extends Observable {
 
     private Case[][] tabCases;
+    HashMap<Case, Point> hm;
+
     private static Random rnd = new Random(4);
     private static Random rand = new Random();
     private Jeu jeu = this;
@@ -32,7 +35,6 @@ public class Jeu extends Observable {
     public int getY(int ind){
         return (int)ind%getSize();
     }
-
 
     public void rnd() {
         new Thread() { // permet de libérer le processus graphique ou de la console
@@ -90,10 +92,14 @@ public class Jeu extends Observable {
                         ind = rp1;
                     else
                         ind = rp2;
-                    if(rn == 0)
+                    if(rn == 0) {
                         tabCases[getX(ind)][getY(ind)] = new Case(4, jeu);//, new Point(getX(ind), getY(ind)), this);
-                    else
+                        hm.put(tabCases[getX(ind)][getY(ind)], new Point(getX(ind), getY(ind)));
+                    }
+                    else{
                         tabCases[getX(ind)][getY(ind)] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)), this);
+                        hm.put(tabCases[getX(ind)][getY(ind)], new Point(getX(ind), getY(ind)));
+                    }
                 }
             }
 
