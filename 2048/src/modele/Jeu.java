@@ -9,6 +9,7 @@ public class Jeu extends Observable {
     private Case[][] tabCases;
     private static Random rnd = new Random(4);
     private static Random rand = new Random();
+    private Jeu jeu = this;
 
     public Jeu(int size) {
         tabCases = new Case[size][size];
@@ -47,10 +48,10 @@ public class Jeu extends Observable {
                                 tabCases[i][j] = null;
                                 break;
                             case 1:
-                                tabCases[i][j] = new Case(2, new Point(i,j));
+                                tabCases[i][j] = new Case(2, jeu);
                                 break;
                             case 2:
-                                tabCases[i][j] = new Case(4, new Point(i,j));
+                                tabCases[i][j] = new Case(4, jeu);
                                 break;
                         }
                     }
@@ -90,9 +91,9 @@ public class Jeu extends Observable {
                     else
                         ind = rp2;
                     if(rn == 0)
-                        tabCases[getX(ind)][getY(ind)] = new Case(4, new Point(getX(ind), getY(ind)));
+                        tabCases[getX(ind)][getY(ind)] = new Case(4, jeu);//, new Point(getX(ind), getY(ind)), this);
                     else
-                        tabCases[getX(ind)][getY(ind)] = new Case(2, new Point(getX(ind), getY(ind)));
+                        tabCases[getX(ind)][getY(ind)] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)), this);
                 }
             }
 
@@ -111,9 +112,9 @@ public class Jeu extends Observable {
         int rn; //aléatoire 2 ou 4
         rn = rand.nextInt(2);
         if(rn == 0)
-            tabCases[getX(ind)][getY(ind)] = new Case(4, new Point(getX(ind), getY(ind)));
+            tabCases[Tools.getX(ind, getSize())][getY(ind)] = new Case(4, jeu);//, new Point(getX(ind), getY(ind)));
         else
-            tabCases[getX(ind)][getY(ind)] = new Case(2, new Point(getX(ind), getY(ind)));
+            tabCases[getX(ind)][getY(ind)] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)));
         for(int i=0; i<getSize(); i++){
             for(int j=0; j<getSize(); j++){
                 System.out.println(tabCases[i][j]);
