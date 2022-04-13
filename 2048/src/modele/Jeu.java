@@ -319,6 +319,45 @@ public class Jeu extends Observable {
         else
             tabCases[getX(ind)][getY(ind)] = new Case(2);
     }
+//Quand le jeux finit
+    public boolean jeuFini() {
+        // Quand le score 2048 est fait
+        for (int i = 0; i < getSize()-1; i++) {//Avec deux for on parcours les row et col.
+            for (int j = 0; j < getSize()-1; j++) {
+                if (tabCases[i][j].getValeur() == 2048) { //ici le tab prends le valeur et le compare si c'est egal à 2048
+                    System.out.println("Woua, vous avez gagner!");
+                    return true;
+                }
+            }
+        }
+       //Si il n'y plus de mouvement à gauche.
+        for (int i = 0; i < getSize()-1; i++) { //
+            int prevCase = getSize()-1; // Concepte de case precedente mais a modifier
+            for (int j=2; j < getSize()-1; j++) {
+                if (j > 0) { // Je suis pas sûr
+                    if (tabCases[i][j].getValeur() == prevCase) { // comparer les valeur des cases [i][j] et celle précedente
+                        return false;
+                    }
+                    prevCase = tabCases[i][j].getValeur(); // A  modifer
+                }
+            }
+        }
+        // On vas dans chaque colone
+        for (int i = 0; i < getSize()-1; i++) {// On parcours le tab
+            int prevCase = tabCases[0][i].getValeur();//case precedente dans le tab
+            for (int j = 0; j < getSize()-1; j++) {
+                if (j > 0) {
+                    if (tabCases[j][i].getValeur() == prevCase) {//compare les valeur des cases avec l'element suivant
+                        return false;
+                    }
+                    prevCase = tabCases[j][i].getValeur();
+                }
+            }
+        }
+        System.out.println("Le jeu est fini!!");
+        return true;
+    }
+
 
     public void move(Direction dir){
         new Thread(){
