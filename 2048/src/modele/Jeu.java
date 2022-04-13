@@ -28,6 +28,14 @@ public class Jeu extends Observable {
         return tabCases[i][j];
     }
 
+    public void setValCase(Case c, int val){
+        tabCases[hm.get(c).x][hm.get(c).y].setValeur(val);
+    }
+
+    public void setPosCase(Case c, Point p){
+        tabCases[p.x][p.y] = c;
+    }
+
     public int getX(int ind){
         return (int)ind/getSize();
     }
@@ -64,7 +72,11 @@ public class Jeu extends Observable {
     }
 
     public boolean voisinIsNull(Case c, Direction dir){
-        return getCoordVoisin(c, dir) == null;
+        return getCoordVoisin(c, dir) == null || getvoisin(c,dir) == null;
+    }
+
+    public boolean voisinExiste(Case c, Direction dir){
+        return !(c.getCoordonee().x<0 || c.getCoordonee().y<0 || c.getCoordonee().x >= getSize() || c.getCoordonee().y >= getSize());
     }
 
     public void rnd() {
@@ -164,8 +176,8 @@ public class Jeu extends Observable {
         if(dir == Direction.gauche){
             for(int i=0; i<getSize(); i++){
                 for(int j=0; j<getSize(); j++){
-
-                    tabCases[j][i].deplacement(dir, getSize());
+                    if(tabCases[j][i] != null)
+                        tabCases[j][i].deplacement(dir, getSize());
                 }
             }
         }

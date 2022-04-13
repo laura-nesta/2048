@@ -48,6 +48,15 @@ public class Case{
     }
 */
     public void deplacement(Direction dir, int size){
-
+        while(this.jeu.voisinIsNull(this, dir) && this.jeu.voisinExiste(this, dir)){
+            this.jeu.hm.replace(this, this.jeu.getCoordVoisin(this, dir));
+            this.jeu.setPosCase(this, this.jeu.getCoordVoisin(this, dir));
+        }
+        if(!(this.jeu.voisinIsNull(this, dir)) && this.jeu.voisinExiste(this, dir)){
+            if(this.jeu.getCase(this.jeu.getCoordVoisin(this, dir).x,this.jeu.getCoordVoisin(this, dir).y).valeur == valeur){
+                 this.jeu.setValCase(this.jeu.getvoisin(this, dir), valeur*2);
+                 this.jeu.supprimeCase(this);
+            }
+        }
     }
 }

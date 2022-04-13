@@ -14,7 +14,6 @@ public class Main {
         Jeu jeu = new Jeu(4);
         Console2048 vue = new Console2048(jeu);
         jeu.addObserver(vue);
-
         vue.start();
 
     }
@@ -24,7 +23,6 @@ public class Main {
         Jeu jeu = new Jeu(4);
         Swing2048 vue = new Swing2048(jeu);
         jeu.addObserver(vue);
-
         vue.setVisible(true);
 
 
