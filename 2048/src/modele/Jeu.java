@@ -36,6 +36,32 @@ public class Jeu extends Observable {
         return (int)ind%getSize();
     }
 
+    public Point getCoordVoisin(Case c, Direction dir){
+        Point p = hm.get(c);
+        Point voi;
+        if(p.x<0 || p.y<0 || p.x >= getSize() || p.y >= getSize())
+            voi = null;
+        if(dir == Direction.gauche)
+            voi = new Point(p.x-1, p.y);
+        if(dir == Direction.droite)
+            voi = new Point(p.x+1, p.y);
+        if(dir == Direction.haut)
+            voi = new Point(p.x, p.y-1);
+        else
+            voi = new Point(p.x, p.y+1);
+        return voi;
+    }
+
+    public Case getvoisin(Case c, Direction dir){
+        Case voi;
+        voi = tabCases[getCoordVoisin(c, dir).x][getCoordVoisin(c, dir).y];
+        return voi;
+    }
+
+    public boolean voisinIsNull(Case c, Direction dir){
+        return getCoordVoisin(c, dir) == null;
+    }
+
     public void rnd() {
         new Thread() { // permet de libérer le processus graphique ou de la console
             public void run() {

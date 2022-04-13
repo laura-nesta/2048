@@ -31,20 +31,7 @@ public class Case{
     public String toString(){
         return ""+valeur;
     }
-
-    public boolean VoisinIsNull(Direction dir){
-        Point p = getCoordonee();
-        Point voi;
-        if(dir == Direction.gauche)
-            voi = new Point(p.x-1, p.y);
-        if(dir == Direction.droite)
-            voi = new Point(p.x+1, p.y);
-        if(dir == Direction.haut)
-            voi = new Point(p.x, p.y-1);
-        else
-            voi = new Point(p.x, p.y+1);
-        return !this.jeu.hm.containsValue(voi);
-    }
+    
 /*
     public boolean estAuBord(Direction dir, int size){
         if(dir == Direction.gauche){
@@ -60,19 +47,7 @@ public class Case{
             return coordonnee.y == 0;
     }
 
-    public boolean voisinIsNull(Direction dir){
-        if(dir == Direction.gauche){
-            return
-        }
-        if(dir == Direction.droite){
-            return coordonnee.x == size-1;
-        }
-        if(dir ==Direction.bas){
-            return coordonnee.y == size-1;
-        }
-        else
-            return coordonnee.y == 0;
-    }
+
 
     public Point GetCoordVoisoin(Direction dir, int size){
         Point voi;
