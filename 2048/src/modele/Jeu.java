@@ -58,6 +58,11 @@ public class Jeu extends Observable {
         return voi;
     }
 
+    public void supprimeCase(Case c){
+        hm.remove(c);
+        c = null;
+    }
+
     public boolean voisinIsNull(Case c, Direction dir){
         return getCoordVoisin(c, dir) == null;
     }
@@ -155,10 +160,10 @@ public class Jeu extends Observable {
 
     }
 
-    public void fusion(Direction dir){
+    public void deplacement(Direction dir){
         for(int i=0; i<getSize(); i++){
             for(int j=0; j<getSize(); j++){
-                tabCases[i][j].fusion(dir, getSize());
+                tabCases[i][j].deplacement(dir, getSize());
             }
         }
     }
@@ -166,9 +171,7 @@ public class Jeu extends Observable {
     public void move(Direction dir){
         new Thread(){
             public void run(){
-                //deplacement(dir);
-                //fusion(dir);
-                //deplacement(dir);
+                deplacement(dir);
                 ajoutCoup();
             }
         }.start();
