@@ -8,7 +8,7 @@ import java.util.Random;
 public class Jeu extends Observable {
 
     private Case[][] tabCases;
-    HashMap<Case, Point> hm;
+    HashMap<Case, Point> hm = new HashMap<>();
 
     private static Random rnd = new Random(4);
     private static Random rand = new Random();
@@ -123,14 +123,14 @@ public class Jeu extends Observable {
                         ind = rp1;
                     else
                         ind = rp2;
+                    Point p = new Point(getX(ind), getY(ind));
                     if(rn == 0) {
-                        tabCases[getX(ind)][getY(ind)] = new Case(4, jeu);//, new Point(getX(ind), getY(ind)), this);
-                        hm.put(tabCases[getX(ind)][getY(ind)], new Point(getX(ind), getY(ind)));
+                        tabCases[p.x][p.y] = new Case(4, jeu);//, new Point(getX(ind), getY(ind)), this);
                     }
                     else{
-                        tabCases[getX(ind)][getY(ind)] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)), this);
-                        hm.put(tabCases[getX(ind)][getY(ind)], new Point(getX(ind), getY(ind)));
+                        tabCases[p.x][p.y] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)), this);
                     }
+                    hm.put(tabCases[p.x][p.y], p);
                 }
             }
 
@@ -161,11 +161,34 @@ public class Jeu extends Observable {
     }
 
     public void deplacement(Direction dir){
-        for(int i=0; i<getSize(); i++){
-            for(int j=0; j<getSize(); j++){
-                tabCases[i][j].deplacement(dir, getSize());
+        if(dir == Direction.gauche){
+            for(int i=0; i<getSize(); i++){
+                for(int j=0; j<getSize(); j++){
+
+                    tabCases[j][i].deplacement(dir, getSize());
+                }
             }
         }
+        if(dir == Direction.droite){
+            for(int i=getSize()-1; i>=0; i--){
+                for(int j=0; j<getSize(); j++){
+                    tabCases[i][j].deplacement(dir, getSize());
+                }
+            }
+        }
+        if(dir ==Direction.bas){
+            for(int i=0; i<getSize(); i++){
+                for(int j=getSize()-1; j>=0; j--){
+                    tabCases[i][j].deplacement(dir, getSize());
+                }
+            }
+        }
+        else
+            for(int i=0; i<getSize(); i++){
+                for(int j=0; j<getSize(); j++){
+                    tabCases[i][j].deplacement(dir, getSize());
+                }
+            }
     }
 
     public void move(Direction dir){

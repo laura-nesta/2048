@@ -48,15 +48,6 @@ public class Case{
     }
 */
     public void deplacement(Direction dir, int size){
-        if(dir == Direction.gauche){
 
-        }
-        if(dir == Direction.droite){
-
-        }
-        if(dir ==Direction.bas){
-
-        }
-        else
     }
 }
