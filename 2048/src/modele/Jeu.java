@@ -25,11 +25,11 @@ public class Jeu extends Observable {
     }
 
     public int getX(int ind){
-        return (int)ind/ tabCases.length;
+        return (int)ind/getSize();
     }
 
     public int getY(int ind){
-        return (int)ind%tabCases.length;
+        return (int)ind%getSize();
     }
 
 
@@ -123,7 +123,11 @@ public class Jeu extends Observable {
     }
 
     public void fusion(Direction dir){
-
+        for(int i=0; i<getSize(); i++){
+            for(int j=0; j<getSize(); j++){
+                tabCases[i][j].fusion(dir, getSize());
+            }
+        }
     }
 
     public void move(Direction dir){
