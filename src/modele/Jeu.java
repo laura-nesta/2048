@@ -45,7 +45,6 @@ public class Jeu extends Observable {
                         }
                     }
                 }
-                System.out.println("ok");
             }
 
 
@@ -74,14 +73,6 @@ public class Jeu extends Observable {
     }
 
     public void setPosCase(Case c, Point p){
-        //tabCases[hm.get(c).x][hm.get(c).y] = null;
-        /*
-        System.out.println("x: "+c.getCoordonee().x);
-        System.out.println("y: "+c.getCoordonee().y);
-
-        System.out.println("x2: "+p.x);
-        System.out.println("y2: "+p.y);
-        */
         c.setCoordonnee(p);
         tabCases[p.x][p.y] = c;
     }
@@ -178,10 +169,12 @@ public class Jeu extends Observable {
                     }
                     hm.put(tabCases[p.x][p.y], new Point(p.x, p.y));
                 }
+                /*
                 for (Map.Entry mapentry : hm.entrySet()) {
                     System.out.println("cle: "+mapentry.getKey()
                             + " | valeur: " + mapentry.getValue());
                 }
+                 */
             }
         }.start();
 
@@ -195,11 +188,34 @@ public class Jeu extends Observable {
                 initFusion();
                 deplacement(dir);
                 ajoutCoup();
+
+                afficher();
             }
         }.start();
 
         setChanged();
         notifyObservers();
+    }
+
+    private void afficher()  {
+
+
+        System.out.printf("\033[H\033[J"); // permet d'effacer la console (ne fonctionne pas toujours depuis la console de l'IDE)
+
+        for (int i = 0; i < jeu.getSize(); i++) {
+            for (int j = 0; j < jeu.getSize(); j++) {
+                Case c = jeu.getCase(i, j);
+                if (c != null) {
+                    System.out.format("%5.5s", c.getValeur());
+                } else {
+                    System.out.format("%5.5s", "-");
+                }
+
+            }
+            System.out.println();
+        }
+        System.out.println("");
+
     }
 
     public void ajoutCoup(){
@@ -215,14 +231,9 @@ public class Jeu extends Observable {
         else
             tabCases[getX(ind)][getY(ind)] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)));
         hm.put(tabCases[getX(ind)][getY(ind)], new Point(getX(ind), getY(ind)));
-
-        //affichage de la grille dans la console
-        for(int j=0; j<getSize(); j++){
-            System.out.println(tabCases[j][0]+" "+tabCases[j][1]+" "+tabCases[j][2]+" "+tabCases[j][3]);
-        }
     }
 
-    public void initFusion(){ //TODO
+    public void initFusion(){
         for(int i=0; i<getSize(); i++){
             for(int j=0; j<getSize(); j++){
                 if(caseIsNotNull(tabCases[i][j]))
@@ -231,8 +242,7 @@ public class Jeu extends Observable {
         }
     }
 
-    public void deplacement(Direction dir){ //TODO
-        System.out.println("ok");
+    public void deplacement(Direction dir){
         if(dir == Direction.gauche){
             for(int j=0; j<getSize(); j++){
                 for(int i=0; i<getSize(); i++){
@@ -265,7 +275,6 @@ public class Jeu extends Observable {
 
     public void appDeplacement(Case c, Direction dir){
         if(caseIsNotNull(c)){
-            System.out.println("ok2");
             c.deplacement(dir);
         }
 
