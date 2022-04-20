@@ -31,13 +31,6 @@ public class Swing2048 extends JFrame implements Observer {
 
         JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
 
-        //tentative de centré la fenêtre
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        contentPane.setLocation(dim.width/2 - contentPane.getWidth()/2, dim.height/2 - contentPane.getHeight()/2);
-        contentPane.setVisible(true);
-        //contentPane.setBackground(Color.blue); //color les cases
-        //fin du code ajouté
-
         for (int i = 0; i < jeu.getSize(); i++) {
             for (int j = 0; j < jeu.getSize(); j++) {
                 Border border = BorderFactory.createLineBorder(Color.darkGray, 5);
@@ -95,11 +88,11 @@ public class Swing2048 extends JFrame implements Observer {
         addKeyListener(new KeyAdapter() { // new KeyAdapter() { ... } est une instance de classe anonyme, il s'agit d'un objet qui correspond au controleur dans MVC
             @Override
             public void keyPressed(KeyEvent e) {
-                switch(e.getKeyCode()) {  // on regarde quelle touche a été pressée
-                    case KeyEvent.VK_LEFT : jeu.moove(Direction.gauche); break;
-                    case KeyEvent.VK_RIGHT : jeu.moove(Direction.droite); break;
-                    case KeyEvent.VK_DOWN : jeu.moove(Direction.bas); break;
-                    case KeyEvent.VK_UP : jeu.moove(Direction.haut); break;
+                switch (e.getKeyCode()) {  // on regarde quelle touche a été pressée
+                    case KeyEvent.VK_LEFT -> jeu.move(Direction.gauche);
+                    case KeyEvent.VK_RIGHT -> jeu.move(Direction.droite);
+                    case KeyEvent.VK_DOWN -> jeu.move(Direction.bas);
+                    case KeyEvent.VK_UP -> jeu.move(Direction.haut);
                 }
             }
         });

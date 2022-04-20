@@ -89,7 +89,7 @@ public class Console2048 extends Thread implements Observer {
                 if (c != null) {
                     System.out.format("%5.5s", c.getValeur());
                 } else {
-                    System.out.format("%5.5s", "");
+                    System.out.format("%5.5s", "-");
                 }
 
             }
