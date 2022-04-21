@@ -219,6 +219,20 @@ public class Jeu extends Observable {
     }
 
     public void ajoutCoup(){
+    boolean restecasevide = false;
+        for (int i=0; i<=getSize()-1;i++){
+            for (int j=0; j<=getSize()-1; j++){
+                if(tabCases[i][j] == null){
+                    restecasevide = true;
+                }
+            }
+        }
+
+        if(restecasevide==false) {
+            System.out.println("Perdu");
+            System.exit(0);
+        }
+
         int ind; //position aléatoire
         do{
             ind = rand.nextInt(getSize()* getSize());
@@ -231,6 +245,8 @@ public class Jeu extends Observable {
         else
             tabCases[getX(ind)][getY(ind)] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)));
         hm.put(tabCases[getX(ind)][getY(ind)], new Point(getX(ind), getY(ind)));
+
+
     }
 
     public void initFusion(){
@@ -251,23 +267,26 @@ public class Jeu extends Observable {
             }
         }
         if(dir == Direction.droite){
-            for(int j=0; j<getSize(); j++){
-                for(int i=getSize()-1; i>=0; i--){
+            for(int j=getSize()-1; j>=0; j--){
+                //  maintenant vertical pour haut ou bas
+                for(int i=0; i<=getSize()-1; i++){
+                    // correspond au parcour "vertical de la map" on pars de 3 et on arrives a 0
                     appDeplacement(tabCases[i][j], dir);
                 }
             }
         }
         if(dir == Direction.haut){
             for(int i=0; i<getSize(); i++){
-                for(int j=0; j<getSize(); j++){
+                    for(int j=0; j<getSize(); j++){
                     appDeplacement(tabCases[i][j], dir);
                 }
             }
         }
+
         if(dir == Direction.bas){
-            for(int i=0; i<getSize(); i++){
-                for(int j=getSize()-1; j>=0; j--){
-                    appDeplacement(tabCases[i][j], dir);
+            for (int i=getSize()-1;i>=0;i--){
+                for(int j=0;j<=getSize()-1;j++){
+                  appDeplacement(tabCases[i][j], dir);
                 }
             }
         }
