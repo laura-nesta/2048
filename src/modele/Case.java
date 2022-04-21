@@ -47,11 +47,15 @@ public class Case {
                 this.jeu.supprimeCase(this.getCoordonee());
                 this.jeu.setPosCase(this, this.jeu.getCoordVoisin(this, dir));
         }
-        if(!this.jeu.estAuBord(this, dir) && !this.jeu.voisinIsNull(this, dir) && !fusion){
+        if(!this.jeu.estAuBord(this, dir) && !this.jeu.voisinIsNull(this, dir) && !fusion && !(this.jeu.getvoisin(this,dir).fusion) ){
             if(this.jeu.getvoisin(this,dir).valeur == valeur){
                 this.jeu.setValCase(this.jeu.getvoisin(this, dir), valeur*2);
                 this.jeu.supprimeCase(this.jeu.hm.get(this));
                 fusion = true;
+                if (valeur == 2048){
+                    System.out.println("Gagne, 2048 a ete atteint");
+                    System.exit(0);
+                }
             }
         }
     }
