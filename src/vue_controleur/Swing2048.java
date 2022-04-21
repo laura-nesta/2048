@@ -11,6 +11,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -40,6 +41,27 @@ public class Swing2048 extends JFrame implements Observer {
 
         JButton btn1 = new JButton("Start");
         panel.add(btn1);
+        btn1.addActionListener(e ->
+        {
+            setVisible(true);
+        });
+
+        JButton btn2 = new JButton("End");
+        panel.add(btn2);
+        btn2.addActionListener(e ->
+        {
+            setVisible(false);
+        });
+
+        /*JLabel label1 = new JLabel("Combien de cases vous voulez pour jouer", JLabel.CENTER);
+        frame.add(label1);
+        JButton btn3 = new JButton("Valider");
+        panel.add(btn3);
+        btn2.addActionListener(e ->
+        {
+            setVisible(true);
+        }); */
+
 
         // Ajouter label et panel au frame
         frame.setLayout(new GridLayout(2, 1));
@@ -51,15 +73,11 @@ public class Swing2048 extends JFrame implements Observer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
         tabC = new JLabel[jeu.getSize()][jeu.getSize()];
 
-
         JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
-
-
 
         for (int i = 0; i < jeu.getSize(); i++) {
             for (int j = 0; j < jeu.getSize(); j++) {
@@ -67,10 +85,9 @@ public class Swing2048 extends JFrame implements Observer {
                 tabC[i][j] = new JLabel();
                 tabC[i][j].setBorder(border);
                 tabC[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-
-
+                tabC[i][j].setForeground(Color.red);
+                //tabC[i][j].setForeground(Color.RGBtoHSB(int r=116,g=109, b=102));
                 contentPane.add(tabC[i][j]);
-
             }
         }
 
@@ -80,8 +97,6 @@ public class Swing2048 extends JFrame implements Observer {
     //Pour le coup je seche sur le probleme de rafraichissement, appuyer sur r et puis voila xD
         
     }
-
-
 
 
     /**
@@ -103,19 +118,18 @@ public class Swing2048 extends JFrame implements Observer {
                         } else {
                             tabC[i][j].setText(c.getValeur() + "");
                         }
-
-
                     }
                 }
             }
         });
-
-
     }
 
     /**
      * Correspond à la fonctionnalité de Contrôleur : écoute les évènements, et déclenche des traitements sur le modèle
      */
+
+
+
     private void ajouterEcouteurClavier() {
         addKeyListener(new KeyAdapter() { // new KeyAdapter() { ... } est une instance de classe anonyme, il s'agit d'un objet qui correspond au controleur dans MVC
             @Override
