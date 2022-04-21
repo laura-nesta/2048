@@ -73,10 +73,12 @@ public class Swing2048 extends JFrame implements Observer {
 
             }
         }
+
         setContentPane(contentPane);
         ajouterEcouteurClavier();
-        rafraichir();
-
+        rafraichir(); // je ne sais pas, il faudrait pouvoir faire comme en prog concu et utiliser les notify
+    //Pour le coup je seche sur le probleme de rafraichissement, appuyer sur r et puis voila xD
+        
     }
 
 
@@ -123,6 +125,7 @@ public class Swing2048 extends JFrame implements Observer {
                     case KeyEvent.VK_RIGHT -> jeu.move(Direction.droite);
                     case KeyEvent.VK_DOWN -> jeu.move(Direction.bas);
                     case KeyEvent.VK_UP -> jeu.move(Direction.haut);
+                    case KeyEvent.VK_R -> rafraichir();// je pense que c'est mieu de le garder pour l'instant
                 }
             }
         });
