@@ -21,15 +21,45 @@ public class Swing2048 extends JFrame implements Observer {
     private JLabel[][] tabC;
     private Jeu jeu;
 
+    private JFrame frame;
+
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
+
+        frame = new JFrame();
+
+        frame.setVisible(true);
+        frame.setTitle("2048");
+        frame.setLocation(500, 200);
+
+        JLabel label = new JLabel("Je suis un JLabel", JLabel.CENTER);
+        frame.add(label);
+
+        JPanel panel = new JPanel();
+
+        JButton btn1 = new JButton("Start");
+        panel.add(btn1);
+
+        // Ajouter label et panel au frame
+        frame.setLayout(new GridLayout(2, 1));
+        frame.add(label);
+        frame.add(panel);
+
+        frame.pack();
+        frame.setSize(600, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
         tabC = new JLabel[jeu.getSize()][jeu.getSize()];
 
 
         JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
+
+
 
         for (int i = 0; i < jeu.getSize(); i++) {
             for (int j = 0; j < jeu.getSize(); j++) {
