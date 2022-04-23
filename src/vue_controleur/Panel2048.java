@@ -47,7 +47,7 @@ public class Panel2048 {
 
         JButton startGameButton = new JButton("Start Game");
         /*startGameButton.addActionListener(listener);
-        addComponent(panel, startGameButton, 0, gridy++, 1, 1,
+         addComponent(panel, startGameButton, 0, gridy++, 1, 1,
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);*/
     }

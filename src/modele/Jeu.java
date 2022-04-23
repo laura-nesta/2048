@@ -2,7 +2,6 @@ package modele;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Random;
 
@@ -16,8 +15,19 @@ public class Jeu extends Observable {
     private static Random rnd = new Random(4);
     private static Random rand = new Random();
 
+    private int MaxScore;
+    private int MaxCell;
+    private int ScoreCourant;
+    private int CellCourant;
+
     public Jeu(int size) {
         tabCases = new Case[size][size];
+
+        MaxCell = 2;
+        MaxScore = 0;
+        ScoreCourant = 0;
+        CellCourant = 0;
+
         init();
     }
 
@@ -190,6 +200,9 @@ public class Jeu extends Observable {
                 ajoutCoup();
 
                 afficher();
+
+                setChanged();
+                notifyObservers();
             }
         }.start();
 
@@ -299,6 +312,38 @@ public class Jeu extends Observable {
 
     }
 
+    /*---------------Score-------------------------*/
+
+    public void setMaxScore(int i) {
+        MaxScore = Math.max(ScoreCourant, MaxScore);
+        MaxCell = Math.max(CellCourant, MaxCell);
+        ScoreCourant = 0;
+        CellCourant = 0;
+    }
+
+    public int getMaxScore() {
+        return MaxScore;
+    }
+
+    public int getMaxCell() {
+        return MaxCell;
+    }
+
+    public void setmaxScore(int _maxScore) {
+        MaxScore = _maxScore;
+    }
+
+    public void setmaxCell(int _MaxCell) {
+        MaxCell = _MaxCell;
+    }
+
+    public int getCurrentScore() {
+        return ScoreCourant;
+    }
+
+    public int getCurrentCell() {
+        return CellCourant;
+    }
 
 
 }

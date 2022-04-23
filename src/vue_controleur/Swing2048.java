@@ -3,6 +3,7 @@ package vue_controleur;
 import modele.Case;
 import modele.Direction;
 import modele.Jeu;
+import modele.Score;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -24,11 +25,51 @@ public class Swing2048 extends JFrame implements Observer {
 
     private JFrame frame;
 
+    private Grille grille;
+
+    private AffScore AffScore;
+    private Score score;
+
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
+        score = new Score(jeu);
+        score.chargeScore();
+        creaSwing();
+    }
 
+    public void creaSwing(){
+
+        constructSwing();
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
+        tabC = new JLabel[jeu.getSize()][jeu.getSize()];
+
+        JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
+
+        for (int i = 0; i < jeu.getSize(); i++) {
+            for (int j = 0; j < jeu.getSize(); j++) {
+                Border border = BorderFactory.createLineBorder(Color.darkGray, 5);
+                tabC[i][j] = new JLabel();
+                tabC[i][j].setBorder(border);
+                tabC[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+                tabC[i][j].setForeground(Color.red);
+                //tabC[i][j].setForeground(Color.RGBtoHSB(int r=116,g=109, b=102));
+                contentPane.add(tabC[i][j]);
+            }
+        }
+
+        setContentPane(contentPane);
+        ajouterEcouteurClavier();
+        rafraichir(); // je ne sais pas, il faudrait pouvoir faire comme en prog concu et utiliser les notify
+    //Pour le coup je seche sur le probleme de rafraichissement, appuyer sur r et puis voila xD
+        
+    }
+
+    public void constructSwing(){
         frame = new JFrame();
+        AffScore = new AffScore(jeu);
 
         frame.setVisible(true);
         frame.setTitle("2048");
@@ -62,6 +103,17 @@ public class Swing2048 extends JFrame implements Observer {
             setVisible(true);
         }); */
 
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new FlowLayout());
+        //mainPanel.add(gridPanel);
+        mainPanel.add(createSidePanel());
+
+        frame.add(mainPanel);
+        //frame.setLocationByPlatform(true);
+        frame.pack();
+        frame.setVisible(true);
+
+
 
         // Ajouter label et panel au frame
         frame.setLayout(new GridLayout(2, 1));
@@ -69,34 +121,27 @@ public class Swing2048 extends JFrame implements Observer {
         frame.add(panel);
 
         frame.pack();
-        frame.setSize(600, 600);
+        frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
-        tabC = new JLabel[jeu.getSize()][jeu.getSize()];
-
-        JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
-
-        for (int i = 0; i < jeu.getSize(); i++) {
-            for (int j = 0; j < jeu.getSize(); j++) {
-                Border border = BorderFactory.createLineBorder(Color.darkGray, 5);
-                tabC[i][j] = new JLabel();
-                tabC[i][j].setBorder(border);
-                tabC[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                tabC[i][j].setForeground(Color.red);
-                //tabC[i][j].setForeground(Color.RGBtoHSB(int r=116,g=109, b=102));
-                contentPane.add(tabC[i][j]);
-            }
-        }
-
-        setContentPane(contentPane);
-        ajouterEcouteurClavier();
-        rafraichir(); // je ne sais pas, il faudrait pouvoir faire comme en prog concu et utiliser les notify
-    //Pour le coup je seche sur le probleme de rafraichissement, appuyer sur r et puis voila xD
-        
+        createSidePanel();
     }
+
+    private JPanel createSidePanel() {
+        JPanel sidePanel = new JPanel();
+        sidePanel.setLayout(new BoxLayout(sidePanel,
+                BoxLayout.PAGE_AXIS));
+        sidePanel.add(vue_controleur.AffScore.getPanel());
+        sidePanel.add(Box.createVerticalStrut(30));
+        sidePanel.add(vue_controleur.AffScore.getPanel());
+        return sidePanel;
+    }
+
+    /*
+    public void updateScorePanel() {
+        score.updatePartControl();
+    }*/
+
 
 
     /**
@@ -139,7 +184,6 @@ public class Swing2048 extends JFrame implements Observer {
                     case KeyEvent.VK_RIGHT -> jeu.move(Direction.droite);
                     case KeyEvent.VK_DOWN -> jeu.move(Direction.bas);
                     case KeyEvent.VK_UP -> jeu.move(Direction.haut);
-                    case KeyEvent.VK_R -> rafraichir();// je pense que c'est mieu de le garder pour l'instant
                 }
             }
         });
