@@ -19,6 +19,8 @@ public class Jeu extends Observable {
     private int MaxCell;
     private int ScoreCourant;
     private int CellCourant;
+    private boolean deplacementFait;
+
 
     public Jeu(int size) {
         tabCases = new Case[size][size];
@@ -72,6 +74,10 @@ public class Jeu extends Observable {
 
     public Case getCase(int i, int j) {
         return tabCases[i][j];
+    }
+
+    public void setDeplacementFait(boolean fait){
+        deplacementFait = fait;
     }
 
     public void supprimeCase(Point p){
@@ -195,9 +201,27 @@ public class Jeu extends Observable {
     public void move(Direction dir){
         new Thread() {
             public void run() {
+                boolean restecasevide = false;
                 initFusion();
                 deplacement(dir);
-                ajoutCoup();
+                if (deplacementFait == true) {
+                    ajoutCoup();
+                    deplacementFait = false;
+                }
+                else {
+                    for (int i=0; i<=getSize()-1;i++){
+                        for (int j=0; j<=getSize()-1; j++){
+                            if(tabCases[i][j] == null){
+                                restecasevide = true;
+                            }
+                        }
+                    }
+
+                    if(restecasevide==false) {
+                        System.out.println("Perdu");
+                        System.exit(0);
+                    }
+                }
 
                 afficher();
 
@@ -232,19 +256,8 @@ public class Jeu extends Observable {
     }
 
     public void ajoutCoup(){
-    boolean restecasevide = false;
-        for (int i=0; i<=getSize()-1;i++){
-            for (int j=0; j<=getSize()-1; j++){
-                if(tabCases[i][j] == null){
-                    restecasevide = true;
-                }
-            }
-        }
 
-        if(restecasevide==false) {
-            System.out.println("Perdu");
-            System.exit(0);
-        }
+
 
         int ind; //position aléatoire
         do{
@@ -272,10 +285,17 @@ public class Jeu extends Observable {
     }
 
     public void deplacement(Direction dir){
+        boolean deplace = true;
         if(dir == Direction.gauche){
             for(int j=0; j<getSize(); j++){
                 for(int i=0; i<getSize(); i++){
+                    if (tabCases[i][j] == null)
+                        deplace = false;
                     appDeplacement(tabCases[i][j], dir);
+                    if (deplace && tabCases[i][j] == null) {
+                        deplacementFait = true;
+                    }
+                    deplace = true;
                 }
             }
         }
@@ -284,14 +304,26 @@ public class Jeu extends Observable {
                 //  maintenant vertical pour haut ou bas
                 for(int i=0; i<=getSize()-1; i++){
                     // correspond au parcour "vertical de la map" on pars de 3 et on arrives a 0
+                    if (tabCases[i][j] == null)
+                        deplace = false;
                     appDeplacement(tabCases[i][j], dir);
+                    if (deplace && tabCases[i][j] == null) {
+                        deplacementFait = true;
+                    }
+                    deplace = true;
                 }
             }
         }
         if(dir == Direction.haut){
             for(int i=0; i<getSize(); i++){
                     for(int j=0; j<getSize(); j++){
-                    appDeplacement(tabCases[i][j], dir);
+                        if (tabCases[i][j] == null)
+                            deplace = false;
+                        appDeplacement(tabCases[i][j], dir);
+                        if (deplace && tabCases[i][j] == null) {
+                            deplacementFait = true;
+                        }
+                        deplace = true;
                 }
             }
         }
@@ -299,7 +331,13 @@ public class Jeu extends Observable {
         if(dir == Direction.bas){
             for (int i=getSize()-1;i>=0;i--){
                 for(int j=0;j<=getSize()-1;j++){
-                  appDeplacement(tabCases[i][j], dir);
+                    if (tabCases[i][j] == null)
+                        deplace = false;
+                    appDeplacement(tabCases[i][j], dir);
+                    if (deplace && tabCases[i][j] == null) {
+                        deplacementFait = true;
+                    }
+                    deplace = true;
                 }
             }
         }
