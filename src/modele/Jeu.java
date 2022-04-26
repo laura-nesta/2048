@@ -183,6 +183,8 @@ public class Jeu extends Observable {
                             + " | valeur: " + mapentry.getValue());
                 }
                  */
+                score.setScoreCourant(0);
+                score.setCellCourant(0);
             }
         }.start();
 

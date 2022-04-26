@@ -45,13 +45,34 @@ public class Swing2048 extends JFrame implements Observer {
     public void creaSwing(){
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
+        //setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
+        setSize(600,450);
+        setLocation(500, 200);
+
+        JPanel grillePanel = new JPanel();
+        grillePanel.add(creaGrille());
+        setContentPane(grillePanel);
+        add(creaScore());
+
+        ajouterEcouteurClavier();
+        rafraichir();
+    }
+
+    public JPanel creaScore(){
+        JPanel score = new JPanel();
+        score.setPreferredSize(new Dimension(200,350));
+        score.setBackground(Color.GREEN);
+
+        
+
+        return score;
+    }
+
+    //crée le panel avec la grille
+    public JPanel creaGrille(){
         tabC = new JLabel[jeu.getSize()][jeu.getSize()];
-
-
-
-
         JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
+        contentPane.setPreferredSize(new Dimension(350,350));
 
         for (int i = 0; i < jeu.getSize(); i++) {
             for (int j = 0; j < jeu.getSize(); j++) {
@@ -59,6 +80,9 @@ public class Swing2048 extends JFrame implements Observer {
                 tabC[i][j] = new JLabel();
                 tabC[i][j].setBorder(border);
                 tabC[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+                /*if((jeu.getCase(i, j)) != null && (jeu.getCase(i, j)).getValeur() >= 16)
+                    tabC[i][j].setForeground(Color.white);
+                else*/
                 tabC[i][j].setForeground(Color.darkGray);
                 if ((jeu.getCase(i, j)) == null)
                     tabC[i][j].setBackground(Color.gray);
@@ -68,9 +92,7 @@ public class Swing2048 extends JFrame implements Observer {
                 contentPane.add(tabC[i][j]);
             }
         }
-        setContentPane(contentPane);
-        ajouterEcouteurClavier();
-        rafraichir();
+        return contentPane;
     }
 
 
