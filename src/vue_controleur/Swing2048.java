@@ -3,6 +3,7 @@ package vue_controleur;
 import modele.Case;
 import modele.Direction;
 import modele.Jeu;
+import modele.Score;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,6 +12,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,36 +23,55 @@ public class Swing2048 extends JFrame implements Observer {
     private JLabel[][] tabC;
     private Jeu jeu;
 
+    private HashMap<Integer, Color> colorMap = new HashMap<>();
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
+        colorMap.put(2, new Color(239, 224, 191, 255));
+        colorMap.put(4, new Color(239, 239, 146, 255));
+        colorMap.put(8, new Color(239, 200, 106, 255));
+        colorMap.put(16, new Color(149, 232, 140,255));
+        colorMap.put(32, new Color(57, 240, 164, 255));
+        colorMap.put(64, new Color(121, 214, 242, 255));
+        colorMap.put(128, new Color(114, 163, 237, 255));
+        colorMap.put(256, new Color(106, 97, 237, 255));
+        colorMap.put(512, new Color(179, 80, 237, 255));
+        colorMap.put(1024, new Color(237, 80,193, 255));
+        colorMap.put(2048, new Color(237, 97,97, 255));
+
+        creaSwing();
+    }
+
+    public void creaSwing(){
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
         tabC = new JLabel[jeu.getSize()][jeu.getSize()];
+
+
 
 
         JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
 
         for (int i = 0; i < jeu.getSize(); i++) {
             for (int j = 0; j < jeu.getSize(); j++) {
-                Border border = BorderFactory.createLineBorder(Color.darkGray, 5);
+                Border border = BorderFactory.createLineBorder(Color.darkGray, 3);
                 tabC[i][j] = new JLabel();
                 tabC[i][j].setBorder(border);
                 tabC[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                tabC[i][j].setBackground(Color.cyan);
-                tabC[i][j].setBackground(Color.cyan);
-
+                tabC[i][j].setForeground(Color.darkGray);
+                if ((jeu.getCase(i, j)) == null)
+                    tabC[i][j].setBackground(Color.gray);
+                else
+                    tabC[i][j].setBackground(colorMap.get((jeu.getCase(i, j)).getValeur()));
+                tabC[i][j].setOpaque(true);
                 contentPane.add(tabC[i][j]);
-
             }
         }
         setContentPane(contentPane);
         ajouterEcouteurClavier();
         rafraichir();
-
     }
-
-
 
 
     /**
@@ -68,18 +89,19 @@ public class Swing2048 extends JFrame implements Observer {
                         if (c == null) {
 
                             tabC[i][j].setText("");
+                            tabC[i][j].setBackground(Color.gray);
 
-                        } else {
-                            tabC[i][j].setText(c.getValeur() + "");
                         }
+                        else {
+                            tabC[i][j].setText(c.getValeur() + "");
 
+                            tabC[i][j].setBackground(colorMap.get(c.getValeur()));
+                        }
 
                     }
                 }
             }
         });
-
-
     }
 
     /**
