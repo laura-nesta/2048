@@ -5,15 +5,15 @@ import modele.Jeu;
 import javax.swing.*;
 import java.awt.*;
 
-public class AffScore {
+public class AffScore  extends JPanel{
 
     private Jeu jeu;
     private static JPanel panel;
 
-    private JTextField highScoreField;
-    private JTextField highCellField;
-    private JTextField currentScoreField;
-    private JTextField currentCellField;
+    private JTextField MaxScore;
+    private JTextField MaxCell;
+    private JTextField currentScore;
+    private JTextField currentCell;
 
     public AffScore(Jeu _jeu){
         jeu = _jeu;
@@ -36,10 +36,10 @@ public class AffScore {
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
 
-        highScoreField = new JTextField(6);
-        highScoreField.setEditable(false);
-        highScoreField.setHorizontalAlignment(JTextField.RIGHT);
-        addComponent(panel, highScoreField, 1, gridy++, 1, 1,
+        MaxScore = new JTextField(6);
+        MaxScore.setEditable(false);
+        MaxScore.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(panel, MaxScore, 1, gridy++, 1, 1,
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
 
@@ -48,10 +48,10 @@ public class AffScore {
                 spaceInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
 
-        highCellField = new JTextField(6);
-        highCellField.setEditable(false);
-        highCellField.setHorizontalAlignment(JTextField.RIGHT);
-        addComponent(panel, highCellField, 1, gridy++, 1, 1,
+        MaxCell = new JTextField(6);
+        MaxCell.setEditable(false);
+        MaxCell.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(panel, MaxCell, 1, gridy++, 1, 1,
                 spaceInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
 
@@ -60,10 +60,10 @@ public class AffScore {
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
 
-        currentScoreField = new JTextField(6);
-        currentScoreField.setEditable(false);
-        currentScoreField.setHorizontalAlignment(JTextField.RIGHT);
-        addComponent(panel, currentScoreField, 1, gridy++, 1, 1,
+        currentScore = new JTextField(6);
+        currentScore.setEditable(false);
+        currentScore.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(panel, currentScore, 1, gridy++, 1, 1,
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
 
@@ -72,10 +72,10 @@ public class AffScore {
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
 
-        currentCellField = new JTextField(6);
-        currentCellField.setEditable(false);
-        currentCellField.setHorizontalAlignment(JTextField.RIGHT);
-        addComponent(panel, currentCellField, 1, gridy++, 1, 1,
+        currentCell = new JTextField(6);
+        currentCell.setEditable(false);
+        currentCell.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(panel, currentCell, 1, gridy++, 1, 1,
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
     }

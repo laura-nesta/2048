@@ -361,5 +361,9 @@ public class Jeu extends Observable {
         System.out.println(score);
     }
 
+    public Score getScore(){
+        return score;
+    }
+
 
 }

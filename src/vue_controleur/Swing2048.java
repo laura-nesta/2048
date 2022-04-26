@@ -18,7 +18,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class Swing2048 extends JFrame implements Observer {
-    private static final int PIXEL_PER_SQUARE = 60;
+    private static final int PIXEL_PER_SQUARE = 100;
     // tableau de cases : i, j -> case graphique
     private JLabel[][] tabC;
     private Jeu jeu;
@@ -45,34 +45,35 @@ public class Swing2048 extends JFrame implements Observer {
     public void creaSwing(){
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
-        setSize(600,450);
+        setSize(jeu.getSize() * PIXEL_PER_SQUARE+300, jeu.getSize() * PIXEL_PER_SQUARE+150);
+        //setSize(600,450);
         setLocation(500, 200);
 
         JPanel grillePanel = new JPanel();
         grillePanel.add(creaGrille());
         setContentPane(grillePanel);
-        add(creaScore());
 
+        add(creaScore());
+        add(creaBouton());
+        add(creaMenu());
         ajouterEcouteurClavier();
         rafraichir();
     }
 
     public JPanel creaScore(){
-        JPanel score = new JPanel();
-        score.setPreferredSize(new Dimension(200,350));
-        score.setBackground(Color.GREEN);
+        JPanel scorepanel = new JPanel();
+        scorepanel.setPreferredSize(new Dimension(200,jeu.getSize() * PIXEL_PER_SQUARE));
+        scorepanel.setBackground(new Color(176, 246, 214, 255));
 
-        
-
-        return score;
+        return scorepanel;
     }
 
     //crée le panel avec la grille
     public JPanel creaGrille(){
         tabC = new JLabel[jeu.getSize()][jeu.getSize()];
         JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
-        contentPane.setPreferredSize(new Dimension(350,350));
+        contentPane.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE));
+        //contentPane.setPreferredSize(new Dimension(350,350));
 
         for (int i = 0; i < jeu.getSize(); i++) {
             for (int j = 0; j < jeu.getSize(); j++) {
@@ -95,6 +96,21 @@ public class Swing2048 extends JFrame implements Observer {
         return contentPane;
     }
 
+    public JPanel creaMenu(){
+        JPanel menu = new JPanel();
+        menu.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 25));
+        menu.setBackground(Color.MAGENTA);
+
+        return menu;
+    }
+
+    public JPanel creaBouton(){
+        JPanel bouton = new JPanel();
+        bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 50));
+        bouton.setBackground(Color.blue);
+
+        return bouton;
+    }
 
     /**
      * Correspond à la fonctionnalité de Vue : affiche les données du modèle
