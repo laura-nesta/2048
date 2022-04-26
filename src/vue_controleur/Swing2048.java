@@ -30,11 +30,28 @@ public class Swing2048 extends JFrame implements Observer {
     private AffScore AffScore;
     private Score score;
 
+    private HashMap<Integer, Color> colorMap = new HashMap<>();
+    //colorMap.put(2, new Color(Color.black.getRGB()));
+
+
+
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
         score = new Score(jeu);
         score.chargeScore();
+        colorMap.put(2, new Color(238, 228, 218, 255));
+        colorMap.put(4, new Color(237, 224, 200, 255));
+        colorMap.put(8, new Color(242, 177, 121, 255));
+        colorMap.put(16, new Color(243, 149, 94,255));
+        colorMap.put(32, new Color(240, 123, 57, 255));
+        colorMap.put(64, new Color(242, 177, 121, 255));
+        colorMap.put(128, new Color(237, 207, 114, 255));
+        colorMap.put(256, new Color(237,200, 97, 255));
+        colorMap.put(512, new Color(237, 200,80, 255));
+        colorMap.put(1024, new Color(237, 200,60, 255));
+        colorMap.put(2048, new Color(237, 200,40, 255));
+
         creaSwing();
     }
 
@@ -46,25 +63,29 @@ public class Swing2048 extends JFrame implements Observer {
         setSize(jeu.getSize() * PIXEL_PER_SQUARE, jeu.getSize() * PIXEL_PER_SQUARE);
         tabC = new JLabel[jeu.getSize()][jeu.getSize()];
 
+
+
+
         JPanel contentPane = new JPanel(new GridLayout(jeu.getSize(), jeu.getSize()));
 
         for (int i = 0; i < jeu.getSize(); i++) {
             for (int j = 0; j < jeu.getSize(); j++) {
-                Border border = BorderFactory.createLineBorder(Color.darkGray, 5);
+                Border border = BorderFactory.createLineBorder(Color.darkGray, 3);
                 tabC[i][j] = new JLabel();
                 tabC[i][j].setBorder(border);
                 tabC[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                tabC[i][j].setForeground(Color.red);
-                //tabC[i][j].setForeground(Color.RGBtoHSB(int r=116,g=109, b=102));
+                tabC[i][j].setForeground(Color.gray);
+                if ((jeu.getCase(i, j)) == null)
+                    tabC[i][j].setBackground(Color.gray);
+                else
+                    tabC[i][j].setBackground(colorMap.get((jeu.getCase(i, j)).getValeur()));
+                tabC[i][j].setOpaque(true);
                 contentPane.add(tabC[i][j]);
             }
         }
-
         setContentPane(contentPane);
         ajouterEcouteurClavier();
-        rafraichir(); // je ne sais pas, il faudrait pouvoir faire comme en prog concu et utiliser les notify
-    //Pour le coup je seche sur le probleme de rafraichissement, appuyer sur r et puis voila xD
-        
+        rafraichir();
     }
 
     public void constructSwing(){
@@ -159,10 +180,15 @@ public class Swing2048 extends JFrame implements Observer {
                         if (c == null) {
 
                             tabC[i][j].setText("");
+                            tabC[i][j].setBackground(Color.gray);
 
-                        } else {
-                            tabC[i][j].setText(c.getValeur() + "");
                         }
+                        else {
+                            tabC[i][j].setText(c.getValeur() + "");
+
+                            tabC[i][j].setBackground(colorMap.get(c.getValeur()));
+                        }
+
                     }
                 }
             }
