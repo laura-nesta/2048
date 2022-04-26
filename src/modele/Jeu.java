@@ -1,6 +1,7 @@
 package modele;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Random;
@@ -185,6 +186,60 @@ public class Jeu extends Observable {
                  */
                 score.setScoreCourant(0);
                 score.setCellCourant(0);
+
+                //score.reinitScore();
+                System.out.println(score);
+                score.loadFile();
+            }
+        }.start();
+
+        setChanged();
+        notifyObservers();
+    }
+
+    public void restart() {
+        new Thread() {
+            public void run() {
+                for(int i=0; i<getSize(); i++){
+                    for(int j=0; j<getSize(); j++){
+                        tabCases[i][j] = null;
+                    }
+                }
+
+                //on remplie 2 cases aléatoires de la grille
+                int rp1; //position aléatoire1
+                int rp2; //position aléatoire2
+                do{
+                    rp1 = rand.nextInt(getSize()* getSize());
+                    rp2 = rand.nextInt(getSize()* getSize());
+                }while(rp1 == rp2);
+
+                int rn; //aléatoire 2 ou 4 (la probabilité d'apparition de 2 est plus élevé)
+                for(int i = 0; i<2; i++){
+                    rn = rand.nextInt(5);
+                    int ind;
+                    if(i==0)
+                        ind = rp1;
+                    else
+                        ind = rp2;
+                    Point p = new Point(getX(ind), getY(ind));
+                    if(rn == 0) {
+                        tabCases[p.x][p.y] = new Case(4, jeu);//, new Point(getX(ind), getY(ind)), this);
+                    }
+                    else{
+                        tabCases[p.x][p.y] = new Case(2, jeu);//, new Point(getX(ind), getY(ind)), this);
+                    }
+                    hm.put(tabCases[p.x][p.y], new Point(p.x, p.y));
+                }
+                /*
+                for (Map.Entry mapentry : hm.entrySet()) {
+                    System.out.println("cle: "+mapentry.getKey()
+                            + " | valeur: " + mapentry.getValue());
+                }
+                 */
+                score.setScoreCourant(0);
+                score.setCellCourant(0);
+
             }
         }.start();
 
@@ -217,7 +272,7 @@ public class Jeu extends Observable {
                     }
                 }
                 majScore();
-
+                score.savefile();
                 afficher();
 
                 setChanged();
@@ -357,7 +412,7 @@ public class Jeu extends Observable {
                 }
             }
         }
-        score.setMaxScore();
+        score.setMax();
         System.out.println(score);
     }
 

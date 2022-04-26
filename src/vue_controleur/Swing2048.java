@@ -8,16 +8,13 @@ import modele.Score;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Swing2048 extends JFrame implements Observer {
+public class Swing2048 extends JFrame implements Observer{
     private static final int PIXEL_PER_SQUARE = 100;
     // tableau de cases : i, j -> case graphique
     private JLabel[][] tabC;
@@ -27,6 +24,7 @@ public class Swing2048 extends JFrame implements Observer {
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
+        jeu.getScore().loadFile();
         colorMap.put(2, new Color(239, 224, 191, 255));
         colorMap.put(4, new Color(239, 239, 146, 255));
         colorMap.put(8, new Color(239, 200, 106, 255));
@@ -109,7 +107,33 @@ public class Swing2048 extends JFrame implements Observer {
         bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 50));
         bouton.setBackground(Color.blue);
 
+        JButton restart = new JButton("restart");
+        //ActionListener start = new Jeu(4);
+        restart.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                //jeu.restart();
+            }
+        });
+
+        JButton quitter = new JButton("quitter");
+        quitter.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                exitProcedure();
+            }
+        });
+        //bouton.add(restart);
+        //bouton.add(quitter);
         return bouton;
+    }
+
+    public void exitProcedure() {
+        jeu.getScore().setMax();
+        jeu.getScore().savefile();
+        System.exit(0);
     }
 
     /**
