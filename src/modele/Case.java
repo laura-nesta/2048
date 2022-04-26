@@ -50,9 +50,9 @@ public class Case {
     public void deplacement(Direction dir){
         deplacement_fait = false;
         while(this.jeu.CaseNonBloque(this, dir)){
-                this.jeu.supprimeCase(this.getCoordonee());
-                this.jeu.setPosCase(this, this.jeu.getCoordVoisin(this, dir));
-                this.jeu.setDeplacementFait(true);
+            this.jeu.supprimeCase(this.getCoordonee());
+            this.jeu.setPosCase(this, this.jeu.getCoordVoisin(this, dir));
+            this.jeu.setDeplacementFait(true);
         }
         if(!this.jeu.estAuBord(this, dir) && !this.jeu.voisinIsNull(this, dir) && !fusion && !(this.jeu.getvoisin(this,dir).fusion) ){
             if(this.jeu.getvoisin(this,dir).valeur == valeur){

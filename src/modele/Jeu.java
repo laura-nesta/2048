@@ -9,27 +9,19 @@ public class Jeu extends Observable {
 
     private Case[][] tabCases;
     HashMap<Case, Point> hm = new HashMap<>();
+    private Score score;
 
     private Jeu jeu = this;
 
     private static Random rnd = new Random(4);
     private static Random rand = new Random();
 
-    private int MaxScore;
-    private int MaxCell;
-    private int ScoreCourant;
-    private int CellCourant;
     private boolean deplacementFait;
 
 
     public Jeu(int size) {
         tabCases = new Case[size][size];
-
-        MaxCell = 2;
-        MaxScore = 0;
-        ScoreCourant = 0;
-        CellCourant = 0;
-
+        score = new Score(this);
         init();
     }
 
@@ -204,7 +196,7 @@ public class Jeu extends Observable {
                 boolean restecasevide = false;
                 initFusion();
                 deplacement(dir);
-                if (deplacementFait == true) {
+                if (deplacementFait) {
                     ajoutCoup();
                     deplacementFait = false;
                 }
@@ -217,11 +209,12 @@ public class Jeu extends Observable {
                         }
                     }
 
-                    if(restecasevide==false) {
+                    if(!restecasevide) {
                         System.out.println("Perdu");
                         System.exit(0);
                     }
                 }
+                majScore();
 
                 afficher();
 
@@ -316,14 +309,14 @@ public class Jeu extends Observable {
         }
         if(dir == Direction.haut){
             for(int i=0; i<getSize(); i++){
-                    for(int j=0; j<getSize(); j++){
-                        if (tabCases[i][j] == null)
-                            deplace = false;
-                        appDeplacement(tabCases[i][j], dir);
-                        if (deplace && tabCases[i][j] == null) {
-                            deplacementFait = true;
-                        }
-                        deplace = true;
+                for(int j=0; j<getSize(); j++){
+                    if (tabCases[i][j] == null)
+                        deplace = false;
+                    appDeplacement(tabCases[i][j], dir);
+                    if (deplace && tabCases[i][j] == null) {
+                        deplacementFait = true;
+                    }
+                    deplace = true;
                 }
             }
         }
@@ -352,35 +345,18 @@ public class Jeu extends Observable {
 
     /*---------------Score-------------------------*/
 
-    public void setMaxScore(int i) {
-        MaxScore = Math.max(ScoreCourant, MaxScore);
-        MaxCell = Math.max(CellCourant, MaxCell);
-        ScoreCourant = 0;
-        CellCourant = 0;
-    }
-
-    public int getMaxScore() {
-        return MaxScore;
-    }
-
-    public int getMaxCell() {
-        return MaxCell;
-    }
-
-    public void setmaxScore(int _maxScore) {
-        MaxScore = _maxScore;
-    }
-
-    public void setmaxCell(int _MaxCell) {
-        MaxCell = _MaxCell;
-    }
-
-    public int getCurrentScore() {
-        return ScoreCourant;
-    }
-
-    public int getCurrentCell() {
-        return CellCourant;
+    public void majScore(){
+        for(int i=0; i<getSize(); i++){
+            for(int j=0; j<getSize(); j++){
+                if(caseIsNotNull(tabCases[i][j])){
+                    int tmp = score.getCurrentScore()+tabCases[i][j].getValeur();
+                    score.setScoreCourant(tmp);
+                    score.setCellCourant(Math.max(tabCases[i][j].getValeur(), score.getCurrentCell()));
+                }
+            }
+        }
+        score.setMaxScore();
+        System.out.println(score);
     }
 
 
