@@ -1,5 +1,6 @@
 package vue_controleur;
 
+import com.sun.tools.javac.Main;
 import modele.Case;
 import modele.Direction;
 import modele.Jeu;
@@ -68,8 +69,6 @@ public class Swing2048 extends JFrame implements Observer{
 
         add(creaMenu());
 
-
-        //jeu.addObserver(this);
         rafraichir();
     }
 
@@ -219,26 +218,8 @@ public class Swing2048 extends JFrame implements Observer{
     public JPanel creaBouton(JFrame _frame){
         JPanel bouton = new JPanel();
         bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 50));
-        //bouton.setBackground(Color.blue);
 
-        /*
-        restart = new JButton("restart");
-        restart.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                final JTextField tf=new JTextField();
-                tf.setText("Welcome to Javatpoint.");
-            }
-        });
-
-
-        quitter = new JButton("quitter");
-        bouton.add(restart);
-        bouton.add(quitter);
-         */
         int gridy = 0;
-
-
-
         Insets regularInsets   =
                 new Insets(10, 10, 0, 10);
 
