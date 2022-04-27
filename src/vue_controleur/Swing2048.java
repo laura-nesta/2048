@@ -49,7 +49,7 @@ public class Swing2048 extends JFrame implements Observer{
         colorMap.put(2048, new Color(237, 97,97, 255));
 
         creaSwing();
-        jeu.addObserver(this);
+        //jeu.addObserver(this);
     }
 
     public void creaSwing(){
@@ -58,19 +58,16 @@ public class Swing2048 extends JFrame implements Observer{
         setSize(jeu.getSize() * PIXEL_PER_SQUARE+300, jeu.getSize() * PIXEL_PER_SQUARE+150);
         //setSize(600,450);
         setLocation(500, 200);
-
+        ajouterEcouteurClavier();
         JPanel grillePanel = new JPanel();
         grillePanel.add(creaGrille());
         setContentPane(grillePanel);
 
-        restart = new JButton("restart");
-
-
         add(creaScore());
-        add(creaBouton(this));
+        //add(creaBouton(this));
 
         add(creaMenu());
-        ajouterEcouteurClavier();
+
 
         //jeu.addObserver(this);
         rafraichir();
@@ -239,6 +236,8 @@ public class Swing2048 extends JFrame implements Observer{
         bouton.add(quitter);
          */
         int gridy = 0;
+
+
 
         Insets regularInsets   =
                 new Insets(10, 10, 0, 10);
