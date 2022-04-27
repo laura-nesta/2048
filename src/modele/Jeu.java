@@ -18,6 +18,7 @@ public class Jeu extends Observable {
     private static Random rand = new Random();
 
     private boolean deplacementFait;
+    private boolean jeuFini = false;
 
 
     public Jeu(int size) {
@@ -124,7 +125,9 @@ public class Jeu extends Observable {
     }
 
     public boolean voisinIsNull(Case c, Direction dir) {
-        return !hm.containsKey(getvoisin(c, dir));
+        if(!estAuBord(c, dir))
+            return !hm.containsKey(getvoisin(c, dir));
+        return true;
     }
 
     public boolean estAuBord(Case c, Direction dir){
@@ -247,30 +250,58 @@ public class Jeu extends Observable {
         notifyObservers();
     }
 
+    public boolean resteCaseVide(){
+        for (int i=0; i<=getSize()-1;i++){
+            for (int j=0; j<=getSize()-1; j++){
+                if(tabCases[i][j] == null){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean mouvementPossible(){
+        for(int i =0; i<getSize(); i++){
+            for(int j =0; j<getSize(); j++){
+                Case c = tabCases[i][j];
+                if(!estAuBord(c, Direction.gauche))
+                    if(c.getValeur() == getvoisin(c, Direction.gauche).getValeur())
+                        return true;
+                if(!estAuBord(c, Direction.droite))
+                    if(c.getValeur() == getvoisin(c, Direction.droite).getValeur())
+                        return true;
+                if(!estAuBord(c, Direction.haut))
+                    if(c.getValeur() == getvoisin(c, Direction.haut).getValeur())
+                        return true;
+                if(!estAuBord(c, Direction.bas))
+                    if(c.getValeur() == getvoisin(c, Direction.bas).getValeur())
+                        return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean grillePleine(){
+        return !resteCaseVide();
+    }
+
+    public boolean isGameOver(){
+        return (grillePleine() && !mouvementPossible());
+    }
+
     public void move(Direction dir){
         new Thread() {
             public void run() {
-                boolean restecasevide = false;
+                if(isGameOver()){
+                        System.out.println("Perdu");
+                        jeuFini = true;
+                        //System.exit(0);
+                    }
                 initFusion();
                 deplacement(dir);
-                if (deplacementFait) {
-                    ajoutCoup();
-                    deplacementFait = false;
-                }
-                else {
-                    for (int i=0; i<=getSize()-1;i++){
-                        for (int j=0; j<=getSize()-1; j++){
-                            if(tabCases[i][j] == null){
-                                restecasevide = true;
-                            }
-                        }
-                    }
+                ajoutCoup();
 
-                    if(!restecasevide) {
-                        System.out.println("Perdu");
-                        System.exit(0);
-                    }
-                }
                 majScore();
                 score.savefile();
                 afficher();

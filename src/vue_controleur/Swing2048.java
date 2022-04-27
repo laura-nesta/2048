@@ -3,13 +3,12 @@ package vue_controleur;
 import modele.Case;
 import modele.Direction;
 import modele.Jeu;
-import modele.Score;
+
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -38,6 +37,7 @@ public class Swing2048 extends JFrame implements Observer{
         colorMap.put(2048, new Color(237, 97,97, 255));
 
         creaSwing();
+        jeu.addObserver(this);
     }
 
     public void creaSwing(){
@@ -52,9 +52,39 @@ public class Swing2048 extends JFrame implements Observer{
         setContentPane(grillePanel);
 
         add(creaScore());
-        add(creaBouton());
+        //add(creaBouton());
+        JPanel bouton = new JPanel();
+        bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 50));
+        bouton.setBackground(Color.blue);
+
+        JButton btn1 = new JButton("Start");
+        //bouton.add(btn1);
+        /*
+        btn1.addActionListener(e ->
+        {
+            setVisible(true);
+        });
+
+         */
+
+        JButton restart = new JButton("restart");
+        //ActionListener start = new Jeu(4);
+        restart.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                //jeu.restart();
+                jeu.getScore().setMax();
+                jeu.getScore().savefile();
+            }
+        });
+        //bouton.add(restart);
+        add(bouton);
+
+
         add(creaMenu());
         ajouterEcouteurClavier();
+        jeu.addObserver(this);
         rafraichir();
     }
 
@@ -63,7 +93,76 @@ public class Swing2048 extends JFrame implements Observer{
         scorepanel.setPreferredSize(new Dimension(200,jeu.getSize() * PIXEL_PER_SQUARE));
         scorepanel.setBackground(new Color(176, 246, 214, 255));
 
+        JLabel MaxScore;
+        JLabel MaxCell;
+        JLabel currentScore;
+        JLabel currentCell;
+
+        final Insets regularInsets   =
+                new Insets(10, 10, 0, 10);
+        final Insets spaceInsets =
+                new Insets(10, 10, 10, 10);
+
+        scorepanel.setLayout(new GridBagLayout());
+        int gridy = 0;
+
+        JLabel highScoreLabel = new JLabel("Meilleur Score:");
+        addComponent(scorepanel, highScoreLabel, 0, gridy, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        MaxScore = new JLabel("" + jeu.getScore().getMaxScore());
+        MaxScore.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(scorepanel, MaxScore, 1, gridy++, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+
+        JLabel highCellLabel = new JLabel("Meilleure Cellule:");
+        addComponent(scorepanel, highCellLabel, 0, gridy, 1, 1,
+                spaceInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        MaxCell = new JLabel("" + jeu.getScore().getMaxCell());
+        MaxCell.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(scorepanel, MaxCell, 1, gridy++, 1, 1,
+                spaceInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        JLabel currentScoreLabel = new JLabel("Score:");
+        addComponent(scorepanel, currentScoreLabel, 0, gridy, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        currentScore = new JLabel("" + jeu.getScore().getCurrentScore());
+        currentScore.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(scorepanel, currentScore, 1, gridy++, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        JLabel currentCellLabel = new JLabel("Cellule max actuelle:");
+        addComponent(scorepanel, currentCellLabel, 0, gridy, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        currentCell = new JLabel("" + jeu.getScore().getCurrentCell());
+        currentCell.setHorizontalAlignment(JTextField.RIGHT);
+        addComponent(scorepanel, currentCell, 1, gridy++, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+
+        repaint();
         return scorepanel;
+    }
+
+    private void addComponent(Container container, Component component,
+                              int gridx, int gridy, int gridwidth, int gridheight,
+                              Insets insets, int anchor, int fill) {
+        GridBagConstraints gbc = new GridBagConstraints(gridx, gridy,
+                gridwidth, gridheight, 1.0D, 1.0D, anchor, fill,
+                insets, 0, 0);
+        container.add(component, gbc);
     }
 
     //crée le panel avec la grille
@@ -95,11 +194,46 @@ public class Swing2048 extends JFrame implements Observer{
     }
 
     public JPanel creaMenu(){
-        JPanel menu = new JPanel();
-        menu.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 25));
-        menu.setBackground(Color.MAGENTA);
+        JPanel menuPanel = new JPanel();
+        menuPanel.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 25));
+        //menuPanel.setBackground(Color.MAGENTA);
+        JMenu menu;
+        JMenuItem e1, e2, e3, e4, e5;
+            JMenuBar menubar = new JMenuBar();
+            // Créer le menu
+            menu = new JMenu("Choisissez la taille de votre grille");
+            // Créer les éléments du menu et sous menu
+            e1 = new JMenuItem("4x4");
+            e1.addActionListener(mnuListener(4));
+            e2 = new JMenuItem("5x5");
+            e2.addActionListener(mnuListener(5));
+            e3 = new JMenuItem("6x6");
+            e3.addActionListener(mnuListener(6));
+            e4 = new JMenuItem("7x7");
+            e4.addActionListener(mnuListener(7));
+            e5 = new JMenuItem("8x8");
+            e5.addActionListener(mnuListener(8));
 
-        return menu;
+            // Ajouter les éléments au menu
+            menu.add(e1);
+            menu.add(e2);
+            menu.add(e3);
+            menu.add(e4);
+            menu.add(e5);
+            // Ajouter le menu au barre de menu
+            menubar.add(menu);
+            menuPanel.add(menubar);
+            // Ajouter la barre de menu au fram
+
+        return menuPanel;
+    }
+
+    /*public void mnuListener(ActionEvent event) {
+        JOptionPane.showMessageDialog( this, "Button clicked !" );
+    }*/
+    public ActionListener mnuListener(int i) {
+        //exitProcedure();
+        return null;
     }
 
     public JPanel creaBouton(){
@@ -114,6 +248,8 @@ public class Swing2048 extends JFrame implements Observer{
             public void actionPerformed(ActionEvent e)
             {
                 //jeu.restart();
+                jeu.getScore().setMax();
+                jeu.getScore().savefile();
             }
         });
 
@@ -131,8 +267,7 @@ public class Swing2048 extends JFrame implements Observer{
     }
 
     public void exitProcedure() {
-        jeu.getScore().setMax();
-        jeu.getScore().savefile();
+        jeu.getScore().reinitScore();
         System.exit(0);
     }
 
@@ -162,6 +297,7 @@ public class Swing2048 extends JFrame implements Observer{
 
                     }
                 }
+                creaScore().repaint();
             }
         });
     }
@@ -187,5 +323,6 @@ public class Swing2048 extends JFrame implements Observer{
     @Override
     public void update(Observable o, Object arg) {
         rafraichir();
+        this.repaint();
     }
 }
