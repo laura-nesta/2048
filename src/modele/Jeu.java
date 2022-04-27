@@ -290,14 +290,18 @@ public class Jeu extends Observable {
         return (grillePleine() && !mouvementPossible());
     }
 
+    public void finDePartie(){
+        if(isGameOver()){
+            System.out.println("Perdu");
+            jeuFini = true;
+            //System.exit(0);
+        }
+    }
+
     public void move(Direction dir){
         new Thread() {
             public void run() {
-                if(isGameOver()){
-                        System.out.println("Perdu");
-                        jeuFini = true;
-                        //System.exit(0);
-                    }
+
                 initFusion();
                 deplacement(dir);
                 ajoutCoup();
@@ -305,6 +309,8 @@ public class Jeu extends Observable {
                 majScore();
                 score.savefile();
                 afficher();
+
+                finDePartie();
 
                 setChanged();
                 notifyObservers();
