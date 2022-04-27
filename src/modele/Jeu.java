@@ -301,7 +301,7 @@ public class Jeu extends Observable {
     public void move(Direction dir){
         new Thread() {
             public void run() {
-
+                finDePartie();
                 initFusion();
                 deplacement(dir);
                 ajoutCoup();

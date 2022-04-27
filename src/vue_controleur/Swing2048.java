@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -20,6 +22,11 @@ public class Swing2048 extends JFrame implements Observer{
     private Jeu jeu;
 
     private HashMap<Integer, Color> colorMap = new HashMap<>();
+
+    JLabel MaxScore;
+    JLabel MaxCell;
+    JLabel currentScore;
+    JLabel currentCell;
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
@@ -81,9 +88,14 @@ public class Swing2048 extends JFrame implements Observer{
         //bouton.add(restart);
         add(bouton);
 
+        if(jeu.isGameOver())
+            add(gameOverPanel());
 
         add(creaMenu());
         ajouterEcouteurClavier();
+
+
+
         jeu.addObserver(this);
         rafraichir();
     }
@@ -91,12 +103,7 @@ public class Swing2048 extends JFrame implements Observer{
     public JPanel creaScore(){
         JPanel scorepanel = new JPanel();
         scorepanel.setPreferredSize(new Dimension(200,jeu.getSize() * PIXEL_PER_SQUARE));
-        scorepanel.setBackground(new Color(176, 246, 214, 255));
-
-        JLabel MaxScore;
-        JLabel MaxCell;
-        JLabel currentScore;
-        JLabel currentCell;
+        scorepanel.setBackground(new Color(207, 231, 231, 255));
 
         final Insets regularInsets   =
                 new Insets(10, 10, 0, 10);
@@ -271,6 +278,19 @@ public class Swing2048 extends JFrame implements Observer{
         System.exit(0);
     }
 
+    public JPanel gameOverPanel(){
+        JPanel goPanel = new JPanel();
+        String s = "Game Over";
+        Dimension d = new Dimension(600,450);
+        goPanel.setPreferredSize(d);
+        goPanel.setBackground(new Color(106, 97, 237, 132));
+        JLabel font = new JLabel(s);
+        goPanel.add(font);
+
+        return goPanel;
+    }
+
+
     /**
      * Correspond à la fonctionnalité de Vue : affiche les données du modèle
      */
@@ -297,7 +317,10 @@ public class Swing2048 extends JFrame implements Observer{
 
                     }
                 }
-                creaScore().repaint();
+                currentCell.setText("" + jeu.getScore().getCurrentCell());
+                currentScore.setText("" + jeu.getScore().getCurrentScore());
+                MaxScore.setText("" + jeu.getScore().getMaxScore());
+                MaxCell.setText("" + jeu.getScore().getMaxCell());
             }
         });
     }
