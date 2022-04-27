@@ -21,12 +21,17 @@ public class Swing2048 extends JFrame implements Observer{
     private JLabel[][] tabC;
     private Jeu jeu;
 
+    JFrame frame = this;
+
     private HashMap<Integer, Color> colorMap = new HashMap<>();
 
     JLabel MaxScore;
     JLabel MaxCell;
     JLabel currentScore;
     JLabel currentCell;
+
+    JButton restart;
+    JButton quitter;
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
@@ -58,45 +63,16 @@ public class Swing2048 extends JFrame implements Observer{
         grillePanel.add(creaGrille());
         setContentPane(grillePanel);
 
+        restart = new JButton("restart");
+
+
         add(creaScore());
-        //add(creaBouton());
-        JPanel bouton = new JPanel();
-        bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 50));
-        bouton.setBackground(Color.blue);
-
-        JButton btn1 = new JButton("Start");
-        //bouton.add(btn1);
-        /*
-        btn1.addActionListener(e ->
-        {
-            setVisible(true);
-        });
-
-         */
-
-        JButton restart = new JButton("restart");
-        //ActionListener start = new Jeu(4);
-        restart.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                //jeu.restart();
-                jeu.getScore().setMax();
-                jeu.getScore().savefile();
-            }
-        });
-        //bouton.add(restart);
-        add(bouton);
-
-        if(jeu.isGameOver())
-            add(gameOverPanel());
+        add(creaBouton(this));
 
         add(creaMenu());
         ajouterEcouteurClavier();
 
-
-
-        jeu.addObserver(this);
+        //jeu.addObserver(this);
         rafraichir();
     }
 
@@ -243,33 +219,64 @@ public class Swing2048 extends JFrame implements Observer{
         return null;
     }
 
-    public JPanel creaBouton(){
+    public JPanel creaBouton(JFrame _frame){
         JPanel bouton = new JPanel();
         bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 50));
-        bouton.setBackground(Color.blue);
+        //bouton.setBackground(Color.blue);
 
-        JButton restart = new JButton("restart");
-        //ActionListener start = new Jeu(4);
-        restart.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                //jeu.restart();
-                jeu.getScore().setMax();
-                jeu.getScore().savefile();
+        /*
+        restart = new JButton("restart");
+        restart.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                final JTextField tf=new JTextField();
+                tf.setText("Welcome to Javatpoint.");
             }
         });
 
-        JButton quitter = new JButton("quitter");
-        quitter.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                exitProcedure();
+
+        quitter = new JButton("quitter");
+        bouton.add(restart);
+        bouton.add(quitter);
+         */
+        int gridy = 0;
+
+        Insets regularInsets   =
+                new Insets(10, 10, 0, 10);
+
+        StartGameActionListener listener =
+                new StartGameActionListener((Swing2048) frame, jeu);
+
+        JButton startGameButton = new JButton("Restart Game");
+        startGameButton.setBackground(new Color(221, 204, 238));
+        startGameButton.addActionListener(listener);
+        addComponent(bouton, startGameButton, 0, gridy++, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        ActionListener listener2 =new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                jeu.getScore().reinitScore();
             }
-        });
-        //bouton.add(restart);
-        //bouton.add(quitter);
+        };
+        JButton reinitScore = new JButton("Reinitialiser les scores");
+        reinitScore.setBackground(new Color(221, 204, 238));
+        reinitScore.addActionListener(listener2);
+        addComponent(bouton, reinitScore, 0, gridy++, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
+        ActionListener listener3 = new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.exit(0);
+            }
+        };
+        JButton quitter = new JButton("Quitter");
+        quitter.setBackground(new Color(239, 209, 209));
+        quitter.addActionListener(listener3);
+        addComponent(bouton, quitter, 0, gridy++, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.HORIZONTAL);
+
         return bouton;
     }
 
@@ -345,6 +352,12 @@ public class Swing2048 extends JFrame implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
+        rafraichir();
+        this.repaint();
+    }
+
+
+    public void update(Observable o) {
         rafraichir();
         this.repaint();
     }
