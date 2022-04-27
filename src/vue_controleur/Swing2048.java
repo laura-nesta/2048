@@ -33,6 +33,7 @@ public class Swing2048 extends JFrame implements Observer{
 
     JButton restart;
     JButton quitter;
+    JButton reinitScore;
 
     public Swing2048(Jeu _jeu) {
         jeu = _jeu;
@@ -48,6 +49,35 @@ public class Swing2048 extends JFrame implements Observer{
         colorMap.put(512, new Color(179, 80, 237, 255));
         colorMap.put(1024, new Color(237, 80,193, 255));
         colorMap.put(2048, new Color(237, 97,97, 255));
+
+        ActionListener quitterListener =new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.exit(0);
+            }
+        };
+        quitter = new JButton("quitter");
+        quitter.setBackground(new Color(239, 209, 209));
+        quitter.addActionListener(quitterListener);
+
+        ActionListener restartListener =new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                jeu.init();
+                rafraichir();
+            }
+        };
+
+        restart = new JButton("restart");
+        restart.addActionListener(restartListener);
+
+        ActionListener reinitListener = new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                jeu.getScore().reinitScore();
+                rafraichir();
+            }
+        };
+        reinitScore = new JButton("reinitialise Score");
+        reinitScore.addActionListener(reinitListener);
+
 
         creaSwing();
         //jeu.addObserver(this);
@@ -66,7 +96,7 @@ public class Swing2048 extends JFrame implements Observer{
 
         add(creaScore());
         //add(creaBouton(this));
-
+        add(creaNotic());
         add(creaMenu());
 
         rafraichir();
@@ -215,9 +245,27 @@ public class Swing2048 extends JFrame implements Observer{
         return null;
     }
 
+    public JPanel creaNotic() {
+
+        int gridy = 0;
+        Insets regularInsets =
+                new Insets(10, 10, 10, 10);
+
+        JPanel notice = new JPanel();
+        notice.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE + 200, 50));
+
+        JLabel reinitScore = new JLabel("Appuyer sur S pour réinitialiser les meilleurs scores");
+        JLabel restartg = new JLabel("Appuyer sur R pour recommencer la partie");
+        addComponent(notice, restartg, 0, gridy, 1, 1,
+                regularInsets, GridBagConstraints.LINE_START,
+                GridBagConstraints.VERTICAL);
+        return notice;
+    }
+
     public JPanel creaBouton(JFrame _frame){
+
         JPanel bouton = new JPanel();
-        bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 50));
+        bouton.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 70));
 
         int gridy = 0;
         Insets regularInsets   =
@@ -236,6 +284,7 @@ public class Swing2048 extends JFrame implements Observer{
         ActionListener listener2 =new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 jeu.getScore().reinitScore();
+                rafraichir();
             }
         };
         JButton reinitScore = new JButton("Reinitialiser les scores");
@@ -256,7 +305,6 @@ public class Swing2048 extends JFrame implements Observer{
         addComponent(bouton, quitter, 0, gridy++, 1, 1,
                 regularInsets, GridBagConstraints.LINE_START,
                 GridBagConstraints.HORIZONTAL);
-
         return bouton;
     }
 
@@ -267,13 +315,19 @@ public class Swing2048 extends JFrame implements Observer{
 
     public JPanel gameOverPanel(){
         JPanel goPanel = new JPanel();
-        String s = "Game Over";
-        Dimension d = new Dimension(600,450);
-        goPanel.setPreferredSize(d);
-        goPanel.setBackground(new Color(106, 97, 237, 132));
-        JLabel font = new JLabel(s);
-        goPanel.add(font);
-
+        JLabel go = new JLabel("Game Over!");
+        goPanel.setPreferredSize(new Dimension(600,450));
+        //goPanel.setBackground(new Color(106, 97, 237, 132));
+        go.setSize(600, 150);
+        go.setFont(new Font("Calibri", Font.PLAIN, 100));
+        go.setVerticalTextPosition(SwingConstants.CENTER);
+        goPanel.add(go);
+        JPanel bp = new JPanel();
+        bp.add(quitter);
+        //bp.add(reinitScore);
+        bp.setPreferredSize(new Dimension(600, 50));
+        goPanel.add(bp);
+        //goPanel.add(restart);
         return goPanel;
     }
 
@@ -308,6 +362,8 @@ public class Swing2048 extends JFrame implements Observer{
                 currentScore.setText("" + jeu.getScore().getCurrentScore());
                 MaxScore.setText("" + jeu.getScore().getMaxScore());
                 MaxCell.setText("" + jeu.getScore().getMaxCell());
+                if(jeu.getJeuFini())
+                    setContentPane(gameOverPanel());
             }
         });
     }
@@ -324,6 +380,8 @@ public class Swing2048 extends JFrame implements Observer{
                     case KeyEvent.VK_RIGHT -> jeu.move(Direction.droite);
                     case KeyEvent.VK_DOWN -> jeu.move(Direction.bas);
                     case KeyEvent.VK_UP -> jeu.move(Direction.haut);
+                    case KeyEvent.VK_S -> jeu.getScore().reinitScore();
+                    case KeyEvent.VK_R -> jeu.init();
                 }
             }
         });

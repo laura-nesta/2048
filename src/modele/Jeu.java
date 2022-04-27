@@ -193,6 +193,8 @@ public class Jeu extends Observable {
                 //score.reinitScore();
                 System.out.println(score);
                 score.loadFile();
+                setChanged();
+                notifyObservers();
             }
         }.start();
 
@@ -296,6 +298,10 @@ public class Jeu extends Observable {
             jeuFini = true;
             //System.exit(0);
         }
+    }
+
+    public boolean getJeuFini(){
+        return jeuFini;
     }
 
     public void move(Direction dir){
