@@ -78,22 +78,22 @@ public class Swing2048 extends JFrame implements Observer{
         reinitScore = new JButton("reinitialise Score");
         reinitScore.addActionListener(reinitListener);
 
-
         creaSwing();
-        //jeu.addObserver(this);
     }
 
     public void creaSwing(){
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(jeu.getSize() * PIXEL_PER_SQUARE+300, jeu.getSize() * PIXEL_PER_SQUARE+150);
-        //setSize(600,450);
         setLocation(500, 200);
         ajouterEcouteurClavier();
+
+        //ajoute la grille dans la frame
         JPanel grillePanel = new JPanel();
         grillePanel.add(creaGrille());
         setContentPane(grillePanel);
 
+        //ajoute les différents panels pour l'affichage du jeu
         add(creaScore());
         //add(creaBouton(this));
         add(creaNotic());
@@ -102,6 +102,7 @@ public class Swing2048 extends JFrame implements Observer{
         rafraichir();
     }
 
+    //Crée le panel avec l'affichage des scores
     public JPanel creaScore(){
         JPanel scorepanel = new JPanel();
         scorepanel.setPreferredSize(new Dimension(200,jeu.getSize() * PIXEL_PER_SQUARE));
@@ -165,6 +166,7 @@ public class Swing2048 extends JFrame implements Observer{
         return scorepanel;
     }
 
+    //méthode qui permet d'ajouter propremnet un component
     private void addComponent(Container container, Component component,
                               int gridx, int gridy, int gridwidth, int gridheight,
                               Insets insets, int anchor, int fill) {
@@ -202,6 +204,8 @@ public class Swing2048 extends JFrame implements Observer{
         return contentPane;
     }
 
+    //crée le panel avec le menu
+    //sencé changer la taille de la grille mais pas fonctionnel
     public JPanel creaMenu(){
         JPanel menuPanel = new JPanel();
         menuPanel.setPreferredSize(new Dimension(jeu.getSize() * PIXEL_PER_SQUARE+200 , 25));
@@ -236,15 +240,12 @@ public class Swing2048 extends JFrame implements Observer{
 
         return menuPanel;
     }
-
-    /*public void mnuListener(ActionEvent event) {
-        JOptionPane.showMessageDialog( this, "Button clicked !" );
-    }*/
     public ActionListener mnuListener(int i) {
         //exitProcedure();
         return null;
     }
 
+    //affiche des instructions à lutilisateur
     public JPanel creaNotic() {
 
         int gridy = 0;
@@ -262,6 +263,7 @@ public class Swing2048 extends JFrame implements Observer{
         return notice;
     }
 
+    //ajoute 3 boutons fonctionel mais l'appel plante le jeu
     public JPanel creaBouton(JFrame _frame){
 
         JPanel bouton = new JPanel();
@@ -308,11 +310,13 @@ public class Swing2048 extends JFrame implements Observer{
         return bouton;
     }
 
+    //sort du jeu
     public void exitProcedure() {
         jeu.getScore().reinitScore();
         System.exit(0);
     }
 
+    //Affichage de la partie perdue
     public JPanel gameOverPanel(){
         JPanel goPanel = new JPanel();
         JLabel go = new JLabel("Game Over!");
@@ -380,7 +384,7 @@ public class Swing2048 extends JFrame implements Observer{
                     case KeyEvent.VK_RIGHT -> jeu.move(Direction.droite);
                     case KeyEvent.VK_DOWN -> jeu.move(Direction.bas);
                     case KeyEvent.VK_UP -> jeu.move(Direction.haut);
-                    case KeyEvent.VK_S -> jeu.getScore().reinitScore();
+                    //case KeyEvent.VK_S -> jeu.getScore().reinitScore();
                     case KeyEvent.VK_R -> jeu.init();
                 }
             }
